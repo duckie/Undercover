@@ -10,3 +10,9 @@ UndercoverEngine.AssertException = function(message) { this.message = message; }
 UndercoverEngine.AssertException.prototype.toString = function () {
   return 'Undercover exception: ' + this.message;
 }
+
+function assert(exp, message) {
+  if (!exp) {
+    throw new AssertException(message);
+  }
+}
