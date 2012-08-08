@@ -1,6 +1,5 @@
-(function(root_object){
-    var _root = root_object;
-
+// This module is designed for RequireJS
+define( function(){
     var _create_game = function() {
         return {};
     }
@@ -90,6 +89,5 @@
     uc_engine.new_shuffled_deck = _create_deck;
     
     // Declaring the public interface into the global scope
-    _root.undercover = uc_engine;
-
-})(this);
+    return uc_engine;
+});
