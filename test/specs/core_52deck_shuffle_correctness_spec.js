@@ -1,4 +1,5 @@
-define(['src/core/core','src/core/random'],function(mod_core,mod_random){
+
+define(['undercover/core/core','undercover/core/random'],function(mod_core,mod_random){
 	underscore = mod_core;
 	Random = mod_random;
 
@@ -22,3 +23,4 @@ define(['src/core/core','src/core/random'],function(mod_core,mod_random){
 
 	return {};
 });
+

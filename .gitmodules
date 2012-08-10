@@ -1,0 +1,6 @@
+[submodule "src/lib/jasmine"]
+	path = src/lib/jasmine
+	url = git://github.com/pivotal/jasmine.git
+[submodule "src/lib/requirejs"]
+	path = src/lib/requirejs
+	url = git://github.com/jrburke/requirejs.git
