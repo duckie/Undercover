@@ -75,7 +75,6 @@ define(function() {
         s2 += 1;
       }
     }
-    mash = null;
 
     var random = function() {
       var t = 2091639 * s0 + c * 2.3283064365386963e-10; // 2^-32
