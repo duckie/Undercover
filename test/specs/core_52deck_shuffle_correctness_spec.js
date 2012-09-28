@@ -10,7 +10,7 @@ define(['undercover/core/core','undercover/core/random'],function(underscore,Ran
 		var epsilon = 1e-3;
 
 		deck = underscore.new_shuffled_deck();
-		//console.log(underscore.new_shuffled_deck);
+		//console.log(underscore.new_shuffled_deck());
 
 		it('should give the same mean each.', function() {
 			for(i = 0; i < iter; i++) {

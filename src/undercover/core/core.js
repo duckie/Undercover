@@ -1,92 +1,177 @@
-// This module is designed for RequireJS
-define( function(){
-    var _create_game = function() {
-        return {};
-    }
+// This module is designed for RequireJS()
+define(['underscore'],function(_){
 
-    var _create_deck = (function() {
-        var _basic_deck = [];
+    var create_object = function(proto)
+    {
+        var that = Object.create(proto);
+        //that.prototype = proto;
+        return that;
+    };
+
+    var create_game = function() {
+        return {};
+    };
+
+    var create_card = function(iValue, iColor, iStrRep)
+    {
+        const m_value = iValue;
+        const m_color = iColor;
+        const m_str = iStrRep;
+
+        return {
+            value: function()
+            {
+                return m_value;
+            },
+
+            color: function()
+            {
+                return m_color;
+            },
+
+            toString: function()
+            {
+                return m_str;
+            }
+        };
+    };
+
+    var create_hand = function(main_arg)
+    {
+        // The default is the texas holdem config
+        var hole_cards = [];
+        var nb_hole_picked = 2;
+        var common_cards = [];
+        var nb_common_picked = 5;
+
+        if(_.isString(main_arg))
+        {
+            // Parses the string to transform
+        }
+        
+        if(_.isObject(main_arg))
+        {
+            hole_cards = main_arg.hole_cards || [];
+            nb_hole_picked = main_arg.nb_hole_to_pick || 2;
+        }
+
+    };
+
+    var basic_deck = (function(){
+        var deck = [];
 
         // Hearts
-        _basic_deck.push({value:2, color:0, str:'2h'});
-        _basic_deck.push({value:3, color:0, str:'3h'});
-        _basic_deck.push({value:4, color:0, str:'4h'});
-        _basic_deck.push({value:5, color:0, str:'5h'});
-        _basic_deck.push({value:6, color:0, str:'6h'});
-        _basic_deck.push({value:7, color:0, str:'7h'});
-        _basic_deck.push({value:8, color:0, str:'8h'});
-        _basic_deck.push({value:9, color:0, str:'9h'});
-        _basic_deck.push({value:10, color:0, str:'Th'});
-        _basic_deck.push({value:11, color:0, str:'Jh'});
-        _basic_deck.push({value:12, color:0, str:'Qh'});
-        _basic_deck.push({value:13, color:0, str:'Kh'});
-        _basic_deck.push({value:14, color:0, str:'Ah'});
+        deck.push(create_card(2, 0, '2h'));
+        deck.push(create_card(3, 0, '3h'));
+        deck.push(create_card(4, 0, '4h'));
+        deck.push(create_card(5, 0, '5h'));
+        deck.push(create_card(6, 0, '6h'));
+        deck.push(create_card(7, 0, '7h'));
+        deck.push(create_card(8, 0, '8h'));
+        deck.push(create_card(9, 0, '9h'));
+        deck.push(create_card(10, 0, 'Th'));
+        deck.push(create_card(11, 0, 'Jh'));
+        deck.push(create_card(12, 0, 'Qh'));
+        deck.push(create_card(13, 0, 'Kh'));
+        deck.push(create_card(14, 0, 'Ah'));
 
         // Clubs
-        _basic_deck.push({value:2, color:1, str:'2c'});
-        _basic_deck.push({value:3, color:1, str:'3c'});
-        _basic_deck.push({value:4, color:1, str:'4c'});
-        _basic_deck.push({value:5, color:1, str:'5c'});
-        _basic_deck.push({value:6, color:1, str:'6c'});
-        _basic_deck.push({value:7, color:1, str:'7c'});
-        _basic_deck.push({value:8, color:1, str:'8c'});
-        _basic_deck.push({value:9, color:1, str:'9c'});
-        _basic_deck.push({value:10, color:1, str:'Tc'});
-        _basic_deck.push({value:11, color:1, str:'Jc'});
-        _basic_deck.push({value:12, color:1, str:'Qc'});
-        _basic_deck.push({value:13, color:1, str:'Kc'});
-        _basic_deck.push({value:14, color:1, str:'Ac'});
+        deck.push(create_card(2, 1, '2c'));
+        deck.push(create_card(3, 1, '3c'));
+        deck.push(create_card(4, 1, '4c'));
+        deck.push(create_card(5, 1, '5c'));
+        deck.push(create_card(6, 1, '6c'));
+        deck.push(create_card(7, 1, '7c'));
+        deck.push(create_card(8, 1, '8c'));
+        deck.push(create_card(9, 1, '9c'));
+        deck.push(create_card(10, 1, 'Tc'));
+        deck.push(create_card(11, 1, 'Jc'));
+        deck.push(create_card(12, 1, 'Qc'));
+        deck.push(create_card(13, 1, 'Kc'));
+        deck.push(create_card(14, 1, 'Ac'));
 
         // Diamonds
-        _basic_deck.push({value:2, color:2, str:'2d'});
-        _basic_deck.push({value:3, color:2, str:'3d'});
-        _basic_deck.push({value:4, color:2, str:'4d'});
-        _basic_deck.push({value:5, color:2, str:'5d'});
-        _basic_deck.push({value:6, color:2, str:'6d'});
-        _basic_deck.push({value:7, color:2, str:'7d'});
-        _basic_deck.push({value:8, color:2, str:'8d'});
-        _basic_deck.push({value:9, color:2, str:'9d'});
-        _basic_deck.push({value:10, color:2, str:'Td'});
-        _basic_deck.push({value:11, color:2, str:'Jd'});
-        _basic_deck.push({value:12, color:2, str:'Qd'});
-        _basic_deck.push({value:13, color:2, str:'Kd'});
-        _basic_deck.push({value:14, color:2, str:'Ad'});
+        deck.push(create_card(2, 2, '2d'));
+        deck.push(create_card(3, 2, '3d'));
+        deck.push(create_card(4, 2, '4d'));
+        deck.push(create_card(5, 2, '5d'));
+        deck.push(create_card(6, 2, '6d'));
+        deck.push(create_card(7, 2, '7d'));
+        deck.push(create_card(8, 2, '8d'));
+        deck.push(create_card(9, 2, '9d'));
+        deck.push(create_card(10, 2, 'Td'));
+        deck.push(create_card(11, 2, 'Jd'));
+        deck.push(create_card(12, 2, 'Qd'));
+        deck.push(create_card(13, 2, 'Kd'));
+        deck.push(create_card(14, 2, 'Ad'));
 
         // Spades
-        _basic_deck.push({value:2, color:3, str:'2s'});
-        _basic_deck.push({value:3, color:3, str:'3s'});
-        _basic_deck.push({value:4, color:3, str:'4s'});
-        _basic_deck.push({value:5, color:3, str:'5s'});
-        _basic_deck.push({value:6, color:3, str:'6s'});
-        _basic_deck.push({value:7, color:3, str:'7s'});
-        _basic_deck.push({value:8, color:3, str:'8s'});
-        _basic_deck.push({value:9, color:3, str:'9s'});
-        _basic_deck.push({value:10, color:3, str:'Ts'});
-        _basic_deck.push({value:11, color:3, str:'Js'});
-        _basic_deck.push({value:12, color:3, str:'Qs'});
-        _basic_deck.push({value:13, color:3, str:'Ks'});
-        _basic_deck.push({value:14, color:3, str:'As'});
+        deck.push(create_card(2, 3, '2s'));
+        deck.push(create_card(3, 3, '3s'));
+        deck.push(create_card(4, 3, '4s'));
+        deck.push(create_card(5, 3, '5s'));
+        deck.push(create_card(6, 3, '6s'));
+        deck.push(create_card(7, 3, '7s'));
+        deck.push(create_card(8, 3, '8s'));
+        deck.push(create_card(9, 3, '9s'));
+        deck.push(create_card(10, 3, 'Ts'));
+        deck.push(create_card(11, 3, 'Js'));
+        deck.push(create_card(12, 3, 'Qs'));
+        deck.push(create_card(13, 3, 'Ks'));
+        deck.push(create_card(14, 3, 'As'));
 
+        return deck;
+    })();
+
+    var deck_prototype = {
+        //cards:[],
+
+        draw:function() {
+            if(0 < this.cards.length) {
+                return this.cards.pop();
+            }
+            else {
+                return null;
+            }
+        }
+    };
+
+    var create_deck = (function() {
         return function() {
             var permutation = [];
             var index = 0;
             for(index = 0; index < 52; index++) {
                 permutation[index] = [index,1-Math.random()];
             }
+
             permutation.sort(function(elem1, elem2){
-                elem1[1] - elem2[1];
+                if( (elem1[1] - elem2[1]) === 0) {
+                    return 0;
+                }
+                else {
+                    if( (elem1[1] - elem2[1]) < 0) {
+                        return -1;
+                    }
+                    else {
+                        return 1;
+                    }
+                }
             });
             var result_deck = [];
             for(index = 0; index < 52; index++) {
-                result_deck[result_deck.length] = _basic_deck[permutation[index][0]];
+                result_deck[result_deck.length] = basic_deck[permutation[index][0]];
             }
 
-            return result_deck;
+            deck_object = create_object(deck_prototype);
+            deck_object.cards = result_deck;
+
+            return deck_object;
         };
     })();
 
     var uc_engine = {};
-    uc_engine.new_shuffled_deck = _create_deck;
+    uc_engine.new_shuffled_deck = create_deck;
+
     
     // Declaring the public interface into the global scope
     return uc_engine;

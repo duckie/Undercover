@@ -1,7 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="../src/core/core.js"></script>
+  <title>Undercover test series</title>
+  <!-- Jasmine lib / testing includes -->
+  <link rel="stylesheet" type="text/css" href="../vendor/jasmine/lib/jasmine-1.2.0/jasmine.css">
+  <script type="text/javascript" src="../vendor/jasmine/lib/jasmine-1.2.0/jasmine.js"></script>
+  <script type="text/javascript" src="../vendor/jasmine/lib/jasmine-1.2.0/jasmine-html.js"></script>
+
+  <!-- global lib includes -->
+  <script type="text/javascript" src="../vendor/underscore.js"></script>
+  <script type="text/javascript" src="../vendor/jquery.js"></script>
+  <script type="text/javascript" src="../vendor/require.js"></script>
+  <!-- ... -->
+
+  <script type="text/javascript">
+
+    // This is key!
+    require.config({
+      baseUrl: '../vendor',
+      paths: {
+        "specs": "../test/specs",
+        "undercover": "../src/undercover",
+      }
+    });
+
+    require([
+      //'specs/core_52deck_shuffle_correctness_spec',
+      'specs/core_compare_hands_spec'
+    ],
+    
+    
+      function() {
+        $(function() {
+          jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+          jasmine.getEnv().execute();
+        });
+      });
+
+  </script>
 </head>
-<body />
+<body>
+  <!-- empty on purpose -->
+</body>
 </html>
