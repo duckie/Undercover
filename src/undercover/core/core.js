@@ -36,13 +36,24 @@ define(['underscore'],function(_){
         };
     };
 
-    var create_hand = function(main_arg)
+    var hand_set_prototype = {
+        toString:function () {
+            var that = this;
+            var str_out = "On board: ";
+            _.each(that.board, function(){
+                str
+            });
+        }
+    };
+
+    var create_hand_set = function(main_arg)
     {
         // The default is the texas holdem config
         var hole_cards = [];
         var nb_hole_picked = 2;
         var common_cards = [];
         var nb_common_picked = 5;
+        var hand_set_object = null;
 
         if(_.isString(main_arg))
         {
@@ -52,9 +63,16 @@ define(['underscore'],function(_){
         if(_.isObject(main_arg))
         {
             hole_cards = main_arg.hole_cards || [];
-            nb_hole_picked = main_arg.nb_hole_to_pick || 2;
+            nb_hole_picked = main_arg.nb_hole_cards_to_pick || 2;
+            common_cards = main_arg.common_cards || [];
+            nb_common_picked = main_arg.nb_board_cards_to_pick || 5;
         }
 
+        hand_set_object = create_object(hand_set_prototype);
+        hand_set_object.hole_cards = hole_cards;
+        hand_set_object.hole_pick = nb_hole_picked;
+        hand_set_object.board = common_cards;
+        hand_set_object.board_pick = nb_common_picked;
     };
 
     var basic_deck = (function(){
@@ -140,6 +158,9 @@ define(['underscore'],function(_){
         return function() {
             var permutation = [];
             var index = 0;
+            var result_deck = [];
+            var deck_object = null;
+
             for(index = 0; index < 52; index++) {
                 permutation[index] = [index,1-Math.random()];
             }
@@ -157,7 +178,7 @@ define(['underscore'],function(_){
                     }
                 }
             });
-            var result_deck = [];
+            
             for(index = 0; index < 52; index++) {
                 result_deck[result_deck.length] = basic_deck[permutation[index][0]];
             }
