@@ -2,38 +2,60 @@
 <html>
 <head>
   <title>Undercover test series</title>
-  <!-- Jasmine lib / testing includes -->
   <link rel="stylesheet" type="text/css" href="../vendor/jasmine/lib/jasmine-1.2.0/jasmine.css">
-  <script type="text/javascript" src="../vendor/jasmine/lib/jasmine-1.2.0/jasmine.js"></script>
-  <script type="text/javascript" src="../vendor/jasmine/lib/jasmine-1.2.0/jasmine-html.js"></script>
-
-  <!-- global lib includes -->
-  <script type="text/javascript" src="../vendor/underscore.js"></script>
-  <script type="text/javascript" src="../vendor/jquery.js"></script>
   <script type="text/javascript" src="../vendor/require.js"></script>
-  <!-- ... -->
 
   <script type="text/javascript">
 
-    // This is key!
     require.config({
       baseUrl: '../vendor',
       paths: {
-        "specs": "../test/specs",
-        "undercover": "../src/undercover",
+        'specs': '../test/specs',
+        'undercover': '../src/undercover',
+        'jasmine': 'jasmine/lib/jasmine-1.2.0/jasmine',
+        'jasmine-html': 'jasmine/lib/jasmine-1.2.0/jasmine-html',
+      },
+      shim: {
+        underscore: {
+          exports: "_"
+        },
+        jasmine: {
+          exports: 'jasmine'
+        },
+        'jasmine-html': {
+          deps: ['jasmine'],
+          exports: 'jasmine'
+        }
       }
     });
 
     require([
-      //'specs/core_52deck_shuffle_correctness_spec',
-      'specs/core_compare_hands_spec'
+      'underscore',
+      'jquery',
+      'jasmine-html'
     ],
-    
-    
-      function() {
+      function(_, $, jasmine) {
+        var jasmineEnv = jasmine.getEnv();
+        
+        //var htmlReporter = new jasmine.TrivialReporter();
+        //jasmineEnv.addReporter(htmlReporter);
+
+        var htmlReporter = new jasmine.HtmlReporter(); 
+        jasmineEnv.addReporter(htmlReporter);
+        jasmineEnv.specFilter = function(spec) {
+          return htmlReporter.specFilter(spec);
+        };
+        
+        var specs = [];
+        specs.push('specs/core_compare_hands_spec');
+        specs.push('specs/core_hands_dic_spec');
+
         $(function() {
-          jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-          jasmine.getEnv().execute();
+          require(specs, function () {
+            jasmineEnv.execute();
+          });
+          //jasmineEnv.addReporter(new jasmine.TrivialReporter());
+          
         });
       });
 
