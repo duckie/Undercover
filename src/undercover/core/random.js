@@ -45,8 +45,9 @@ define(function() {
     return mash;
   })();
 
+
   return (function() {
-    return (function(args) {
+    args = Array.prototype.slice.call(arguments);
     // Johannes Baagøe <baagoe@baagoe.com>, 2010
     var s0 = 0;
     var s1 = 0;
@@ -82,17 +83,18 @@ define(function() {
       s1 = s2;
       return s2 = t - (c = t | 0);
     };
+
     random.uint32 = function() {
       return random() * 0x100000000; // 2^32
     };
+
     random.fract53 = function() {
       return random() + 
         (random() * 0x200000 | 0) * 1.1102230246251565e-16; // 2^-53
-      };
-      random.version = 'Alea 0.9';
-      random.args = args;
-      return random;
+    };
 
-    } (Array.prototype.slice.call(arguments)));
+    random.version = 'Alea 0.9';
+    random.args = args;
+    return random;
   });
 });
