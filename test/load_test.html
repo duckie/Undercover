@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Undercover test series</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="stylesheet" type="text/css" href="../vendor/jasmine/lib/jasmine-1.2.0/jasmine.css">
   <script type="text/javascript" src="../vendor/require.js"></script>
 
@@ -30,11 +31,10 @@
     });
 
     require([
-      'underscore',
       'jquery',
       'jasmine-html'
     ],
-      function(_, $, jasmine) {
+      function($, jasmine) {
         var jasmineEnv = jasmine.getEnv();
         
         //var htmlReporter = new jasmine.TrivialReporter();
@@ -47,15 +47,13 @@
         };
         
         var specs = [];
-        specs.push('specs/core_compare_hands_spec');
         specs.push('specs/core_hands_dic_spec');
+        specs.push('specs/core_compare_hands_spec');
 
         $(function() {
           require(specs, function () {
             jasmineEnv.execute();
-          });
-          //jasmineEnv.addReporter(new jasmine.TrivialReporter());
-          
+          });          
         });
       });
 
