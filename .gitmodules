@@ -1,6 +1,0 @@
-[submodule "src/lib/jasmine"]
-	path = src/lib/jasmine
-	url = https://github.com/pivotal/jasmine.git
-[submodule "src/lib/requirejs"]
-	path = src/lib/requirejs
-	url = https://github.com/jrburke/requirejs.git

@@ -2,10 +2,6 @@
 
 This project is in early development.
 
-## About the submodules of the repository
-
-If you only use *Node.js* to execute the code, you dont need to retrieve any of the submodules since the best way to do it properly is to use *npm*. The submodules are needed for code running into a browser.
-
 ## How to run the tests
 
 ### With Node.js
@@ -13,6 +9,12 @@ If you only use *Node.js* to execute the code, you dont need to retrieve any of 
 Execute the following commands into your terminal:
 
 ```bash
-	npm install jasmine-node requirejs
+	npm install underscore jasmine-node requirejs
 	node test/run-test-node.js
 ```
+
+### In a browser
+
+Install [Jasmine](http://pivotal.github.com/jasmine/) in *vendor/jasmine/*. Install [Underscore](http://underscorejs.org) as *vendor/underscore.js*. Install [RequireJS](http://requirejs.org/docs/download.html) as *vendor/require.js*.
+
+Then open *test/load_test.html* in your web browser.
