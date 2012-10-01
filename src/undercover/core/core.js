@@ -1,6 +1,13 @@
 // This module is designed for RequireJS()
 define(['underscore'],function(_){
 
+    /**
+    * Creates a  new object
+    * 
+    * There is different methods to implement differential inhderitance in
+    * javascript so I use this method to let me test different ways to do it.
+    * This could also be ued to optimize depending on the running platform.
+    */
     var create_object = function(proto)
     {
         var that = Object.create(proto);
@@ -12,6 +19,14 @@ define(['underscore'],function(_){
         return {};
     };
 
+    /**
+    * Card factory
+    *
+    * create_card creates a object which represents a given card with
+    * a property for the color, the value and the classic two characters
+    * string representation (ex: "Ah" for the heart ace).
+    * This is to be used internally
+    */
     var create_card = function(iValue, iColor, iStrRep)
     {
         const m_value = iValue;
@@ -36,7 +51,28 @@ define(['underscore'],function(_){
         };
     };
 
-    var hand_set_prototype = {
+    /**
+    * Hand interface
+    *
+    * A hand is a set of 5 cards. This object helps you
+    * to create the set in an easy way and computes the
+    * value of the hand.
+    */
+    var hand_prototype = {
+        compute_value:function(){
+            
+        }
+    };
+
+    /**
+    * Handset interface
+    * 
+    * A handset is the combination of the hole cards of
+    * a player and the cards on the board. This is the enity
+    * used to compute which poker hands the player get, depending
+    * on the played variation.
+    */
+    var hand_set_prototype = { 
         toString:function () {
             var that = this;
             var str_out = "On board: ";
@@ -46,6 +82,11 @@ define(['underscore'],function(_){
         }
     };
 
+    /**
+    * Creates a full handset
+    * 
+    * 
+    */
     var create_hand_set = function(main_arg)
     {
         // The default is the texas holdem config
