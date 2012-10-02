@@ -1,13 +1,12 @@
 
-define(['undercover/core/card'],function(_deckmod) {
-	describe('Testing deck construction', function() {
-		var deck = _deckmod.new_shuffled_deck();
-		//console.log(deck.draw().toString());
-		//alert(deck.draw().toString());
+define(['undercover/core/hand'],function(_handmod_) {
+	describe('Testing hand construction', function() {
+		var current_hand = "Ah7c8cJcJs";
+		var hand = _handmod_.create_hand(current_hand);
 
-		it('should give the same mean each.', function() {
-			var mean = 0.5;
-			expect(2).toBeLessThan(3);
+		it('Constructs ' + current_hand, function() {
+			var str_out = hand.toString();
+			expect(str_out).toEqual(current_hand);
 		});
 	});
 

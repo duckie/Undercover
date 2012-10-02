@@ -1,5 +1,5 @@
 // This module is designed for RequireJS()
-define(['underscore','./core','./random'],function(_, _ucengine_) {
+define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
 	
     /**
     * Hand interface
@@ -9,27 +9,76 @@ define(['underscore','./core','./random'],function(_, _ucengine_) {
     * value of the hand.
     */
     var hand_prototype = {
-        compute_value:function(){
+       /* compute_value:function(){
             
+        },
+
+        toString:function() {
+            var that = this;
+            return _.reduce(that.cards, function(str,card){ return str + card.toString(); }, '');
+        }*/
+    };
+
+    function create_hand(iArg)
+    {
+       /* var cards = null;
+        var exception = null;
+        var index = 0;
+        var current_card = 0;
+        var hand_object = null;
+
+        if(_.isString(iArg))
+        {
+            exception = {
+                name:'parse error',
+                message:('The string ' + iArg + ' is ill-formed for hand construction.'
+            };
+
+            if(10 !== iArg.length) {
+                throw exception;
+            }
+
+            cards = [];
+            for(index = 0; index < 5; index = index + 2)
+            {
+                current_card = _deckmod_.get_card_from_str( iArg.slice( 2*index , 2*(index+1) ) );
+                if(current_card === null) {
+                    throw exception;
+                }
+                cards.push(current_card);
+            }
         }
+
+        if(_.isArray(iArg)) {
+            if(5 !== iArg.length) {
+                throw {
+                    name:'argument error',
+                    message:('The array for hand construction must have exactly 5 elements.')
+                };
+            }
+
+            cards = iArg;
+        }
+
+        hand_object = _ucengine_._create_object(hand_prototype);
+        hand.cards = cards;
+
+        return hand_object;*/
     };
 
     /**
     * Handset interface
     * 
     * A handset is the combination of the hole cards of
-    * a player and the cards on the board. This is the enity
+    * a player and the cards on the board. This is the entity
     * used to compute which poker hands the player get, depending
     * on the played variation.
     */
     var hand_set_prototype = { 
-        toString:function () {
+       /*toString:function () {
             var that = this;
             var str_out = "On board: ";
-            _.each(that.board, function(){
-                str
-            });
-        }
+        }*/
     };
 
     /**
@@ -37,9 +86,8 @@ define(['underscore','./core','./random'],function(_, _ucengine_) {
     * 
     * 
     */
-    var create_hand_set = function(main_arg)
-    {
-        // The default is the texas holdem config
+    var create_hand_set = function(main_arg) {
+       /* // The default is the texas holdem config
         var hole_cards = [];
         var nb_hole_picked = 2;
         var common_cards = [];
@@ -59,14 +107,14 @@ define(['underscore','./core','./random'],function(_, _ucengine_) {
             nb_common_picked = main_arg.nb_board_cards_to_pick || 5;
         }
 
-        hand_set_object = create_object(hand_set_prototype);
+        hand_set_object = _ucengine_._create_object(hand_set_prototype);
         hand_set_object.hole_cards = hole_cards;
         hand_set_object.hole_pick = nb_hole_picked;
         hand_set_object.board = common_cards;
-        hand_set_object.board_pick = nb_common_picked;
+        hand_set_object.board_pick = nb_common_picked;*/
     };
 
     return {
-    	// Noting yet
+        create_hand: create_hand
     };
 };
