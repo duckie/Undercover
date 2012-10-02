@@ -26,24 +26,27 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         var index = 0;
         var current_card = 0;
         var hand_object = null;
+        var cardId = null;
 
         if(_.isString(iArg))
         {
-            exception = {
-                name:'parse error',
-                message:'The string ' + iArg + ' is ill-formed for hand construction.'
-            };
-
             if(10 !== iArg.length) {
-                throw exception;
+                throw {
+                    name:'parse error',
+                    message:'The string ' + iArg + ' is ill-formed for hand construction, it must be 10 characters long.'
+                };
             }
 
             cards = [];
             for(index = 0; index < 5; ++index)
             {
-                current_card = _deckmod_.get_card_from_str( iArg.slice( 2*index , 2*(index+1) ) );
+                cardId = iArg.slice( 2*index , 2*(index+1) );
+                current_card = _deckmod_.getCardFromStr(cardId);
                 if(current_card === null) {
-                    throw exception;
+                    throw {
+                        name:'parse error',
+                        message:'The string ' + iArg + ' is ill-formed for hand construction, the hand "' + cardId + '" does not exist.'
+                    };
                 }
                 cards.push(current_card);
             }
@@ -53,14 +56,14 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
             if(5 !== iArg.length) {
                 throw {
                     name:'argument error',
-                    message:('The array for hand construction must have exactly 5 elements.')
+                    message:'The array for hand construction must have exactly 5 elements.'
                 };
             }
 
             cards = iArg;
         }
 
-        hand_object = _ucengine_._create_object(hand_prototype);
+        hand_object = _ucengine_.createObject(hand_prototype);
         hand_object.cards = cards;
 
         return hand_object;
@@ -107,7 +110,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
             nb_common_picked = main_arg.nb_board_cards_to_pick || 5;
         }
 
-        hand_set_object = _ucengine_._create_object(hand_set_prototype);
+        hand_set_object = _ucengine_.createObject(hand_set_prototype);
         hand_set_object.hole_cards = hole_cards;
         hand_set_object.hole_pick = nb_hole_picked;
         hand_set_object.board = common_cards;

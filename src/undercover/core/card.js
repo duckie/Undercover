@@ -2,6 +2,7 @@
 define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
 
 	var dictionary = {};
+    var card_prototype = null;
 	var basic_deck = null;
 	var deck_prototype = null;
 
@@ -11,6 +12,14 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
 		diamond:2,
 		spade:3
 	};
+
+    /**
+    * The card prototype
+    *
+    * It does have any method but can let us check if we manipulate
+    * card objects having the same prototype.
+    */
+    card_prototype = {};
 
 	/**
     * Card factory
@@ -26,27 +35,32 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     	const m_color = iColor;
     	const m_str = iStrRep;
 
-    	var card = {
-    		value: function()
-    		{
-    			return m_value;
-    		},
+    	var card = _ucengine_.createObject(card_prototype, {
+    		value: {
+                value: function() { return m_value; },
+                enumerable: true
+            },
 
-    		color: function()
-    		{
-    			return m_color;
-    		},
+    		color: {
+                value: function() { return m_color; },
+                enumerable: true
+            },
 
-    		toString: function()
-    		{
-    			return m_str;
-    		}
-    	};
+    		toString: {
+                value: function() { return m_str; },
+                enumerable: true
+            }
+    	});
 
     	dictionary[iStrRep] = card;
 
     	return card;
     };
+
+    function is_a_card(iObj)
+    {
+        return (iObj.prototype === card_prototype);
+    }
 
     var get_in_dictionary = function(iStringRep)
     {
@@ -164,7 +178,7 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     		result_deck[result_deck.length] = basic_deck[permutation[index][0]];
     	}
 
-    	deck_object = _ucengine_._create_object(deck_prototype);
+    	deck_object = _ucengine_.createObject(deck_prototype);
     	deck_object.cards = result_deck;
 
     	return deck_object;
@@ -173,7 +187,8 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     // Declaring the public interface
     return {
     	color_codes: card_color,
-    	new_shuffled_deck: create_deck,
-    	get_card_from_str: get_in_dictionary
+    	newShuffledDeck: create_deck,
+    	getCardFromStr: get_in_dictionary,
+        isCard: is_a_card
     };
 });

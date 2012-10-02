@@ -1,5 +1,5 @@
 
-define(['undercover/core/card','undercover/core/random'],function(_deckmod,Random) {
+define(['undercover/core/card','undercover/core/random'],function(_deckmod_,Random) {
 	describe('Shuffle for a lot of times', function() {
 				
 		var rand = Random(Math.round((new Date()).getTime()));
@@ -9,8 +9,8 @@ define(['undercover/core/card','undercover/core/random'],function(_deckmod,Rando
 		var iter = 1e7;
 		var epsilon = 1e-3;
 
-		deck = _deckmod.new_shuffled_deck();
-		//console.log(underscore.new_shuffled_deck());
+		deck = _deckmod_.newShuffledDeck();
+		//console.log(underscore.newShuffledDeck());
 
 		it('should give the same mean each.', function() {
 			for(i = 0; i < iter; i++) {
