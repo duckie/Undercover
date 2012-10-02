@@ -27,6 +27,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         var current_card = 0;
         var hand_object = null;
         var cardId = null;
+        var elements_are_cards = false;
 
         if(_.isString(iArg))
         {
@@ -60,11 +61,28 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
                 };
             }
 
+            // Checking that everybody is a card
+            elements_are_cards = _.reduce(iArg, function(current_state, elem) { return (current_state && _deckmod_.isCard(elem)); }, true);
+            if(true !== elements_are_cards)
+            {
+                throw {
+                    name:'argument error',
+                    message:'The array must only contains "card" objects.'
+                };
+            }
+
             cards = iArg;
         }
 
-        hand_object = _ucengine_.createObject(hand_prototype);
-        hand_object.cards = cards;
+        cards = _.uniq(cards);
+        if(5 !== cards.length) {
+            throw {
+                name:'argument error',
+                message:'A hand must not contain duplicates.'
+            };
+        }
+
+        hand_object = _ucengine_.createObject(hand_prototype, {cards: {value: cards, enumerable: true}});
 
         return hand_object;
     };

@@ -59,7 +59,7 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
 
     function is_a_card(iObj)
     {
-        return (iObj.prototype === card_prototype);
+        return card_prototype.isPrototypeOf(iObj);
     }
 
     var get_in_dictionary = function(iStringRep)

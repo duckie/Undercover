@@ -14,10 +14,9 @@ define(['underscore'], function(_){
     * javascript so I use this method to let me test different ways to do it.
     * This could also be ued to optimize depending on the running platform.
     */
-    var create_object = function(proto, properties)
+    function create_object (proto, properties)
     {
-        var new_object = Object.create(proto, properties);
-        return new_object;
+        return Object.create(proto, properties);
     };
 
     return {
