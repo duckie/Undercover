@@ -8,6 +8,13 @@
 define(['underscore'], function(_){
 
     /**
+    * Protype used to created different objects, in particular those with
+    * non-writable properties
+    */
+
+    var uc_object_prototype = {};
+
+    /**
     * Creates a  new object
     * 
     * There is different methods to implement differential inhderitance in
@@ -19,7 +26,29 @@ define(['underscore'], function(_){
         return Object.create(proto, properties);
     };
 
-    return {
-        createObject: create_object
+    /**
+    * Creates a new object with non-writable yet enumerable properties
+    *
+    * This purpose could be achieved with create_object but this method helps by constructing
+    * the parameter object of properties with writable set to false and enumerable set to true.
+    */
+    function create_protected_object(proto, properties)
+    {
+        var create_obj_parameter = {};
+        _.each(properties, function(elem_value,key) {
+            create_obj_parameter[key] = {value: elem_value, enumerable:true, writable:false};
+        });
+        return create_object(proto, create_obj_parameter);
     };
+
+    function create_uc_object(properties)
+    {
+        return create_protected_object(uc_object_prototype, properties);
+    }
+
+    return create_uc_object({
+        createUCObject: create_uc_object,
+        createObject: create_object,
+        createProtectedObject: create_protected_object
+    });
 });

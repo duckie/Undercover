@@ -1,6 +1,6 @@
 // This module is designed for RequireJS()
 define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
-	
+
     /**
     * Hand interface
     *
@@ -82,7 +82,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
             };
         }
 
-        hand_object = _ucengine_.createObject(hand_prototype, {cards: {value: cards, enumerable: true}});
+        hand_object = _ucengine_.createProtectedObject(hand_prototype, {cards: cards});
 
         return hand_object;
     };
@@ -135,7 +135,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         hand_set_object.board_pick = nb_common_picked;
     };
 
-    return {
-        create_hand: create_hand
-    };
+    return _ucengine_.createUCObject({
+        createHand: create_hand
+    });
 });

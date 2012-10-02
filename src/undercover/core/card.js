@@ -6,12 +6,12 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
 	var basic_deck = null;
 	var deck_prototype = null;
 
-	const card_color = {
+	const card_color = _ucengine_.createUCObject({
 		heart:0,
 		club:1,
 		diamond:2,
 		spade:3
-	};
+	});
 
     /**
     * The card prototype
@@ -35,21 +35,10 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     	const m_color = iColor;
     	const m_str = iStrRep;
 
-    	var card = _ucengine_.createObject(card_prototype, {
-    		value: {
-                value: function() { return m_value; },
-                enumerable: true
-            },
-
-    		color: {
-                value: function() { return m_color; },
-                enumerable: true
-            },
-
-    		toString: {
-                value: function() { return m_str; },
-                enumerable: true
-            }
+    	var card = _ucengine_.createProtectedObject(card_prototype, {
+    	   value: function() { return m_value; },
+    	   color: function() { return m_color; },
+           toString: function() { return m_str; }
     	});
 
     	dictionary[iStrRep] = card;
@@ -185,10 +174,10 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     };
 
     // Declaring the public interface
-    return {
-    	color_codes: card_color,
+    return _ucengine_.createUCObject({
+    	_colorCodes: card_color,
     	newShuffledDeck: create_deck,
     	getCardFromStr: get_in_dictionary,
         isCard: is_a_card
-    };
+    });
 });
