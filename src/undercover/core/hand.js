@@ -9,19 +9,19 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     * value of the hand.
     */
     var hand_prototype = {
-       /* compute_value:function(){
+        compute_value:function(){
             
         },
 
         toString:function() {
             var that = this;
             return _.reduce(that.cards, function(str,card){ return str + card.toString(); }, '');
-        }*/
+        }
     };
 
     function create_hand(iArg)
     {
-       /* var cards = null;
+        var cards = null;
         var exception = null;
         var index = 0;
         var current_card = 0;
@@ -31,7 +31,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         {
             exception = {
                 name:'parse error',
-                message:('The string ' + iArg + ' is ill-formed for hand construction.'
+                message:'The string ' + iArg + ' is ill-formed for hand construction.'
             };
 
             if(10 !== iArg.length) {
@@ -39,7 +39,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
             }
 
             cards = [];
-            for(index = 0; index < 5; index = index + 2)
+            for(index = 0; index < 5; ++index)
             {
                 current_card = _deckmod_.get_card_from_str( iArg.slice( 2*index , 2*(index+1) ) );
                 if(current_card === null) {
@@ -61,9 +61,9 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         }
 
         hand_object = _ucengine_._create_object(hand_prototype);
-        hand.cards = cards;
+        hand_object.cards = cards;
 
-        return hand_object;*/
+        return hand_object;
     };
 
     /**
@@ -75,10 +75,10 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     * on the played variation.
     */
     var hand_set_prototype = { 
-       /*toString:function () {
+       toString:function () {
             var that = this;
             var str_out = "On board: ";
-        }*/
+        }
     };
 
     /**
@@ -87,7 +87,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     * 
     */
     var create_hand_set = function(main_arg) {
-       /* // The default is the texas holdem config
+       // The default is the texas holdem config
         var hole_cards = [];
         var nb_hole_picked = 2;
         var common_cards = [];
@@ -111,10 +111,10 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         hand_set_object.hole_cards = hole_cards;
         hand_set_object.hole_pick = nb_hole_picked;
         hand_set_object.board = common_cards;
-        hand_set_object.board_pick = nb_common_picked;*/
+        hand_set_object.board_pick = nb_common_picked;
     };
 
     return {
         create_hand: create_hand
     };
-};
+});
