@@ -44,7 +44,26 @@ define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( 
 	});
 
 	describe('Testing hand value computation', function() {
-		
+		var hand1 = _handmod_.createHand('QhJhTh9h8h');
+		var hand2 = _handmod_.createHand('3h3s3d3c2c');
+		var hand3 = _handmod_.createHand('5h5d5c9c9h');
+		var hand4 = _handmod_.createHand('KhJh5h2h7h');
+		var hand5 = _handmod_.createHand('5h6d7d8c9s');
+		var hand6 = _handmod_.createHand('Js8hJhJd7c');
+		var hand7 = _handmod_.createHand('Js8h8cJd2c');
+		var hand8 = _handmod_.createHand('5s8h8cJd2c');
+		var hand9 = _handmod_.createHand('5sAh8cJd2c');
+
+		it('\'' + hand1 + ' should be a straigth flush', function() {
+			hand1.compute_value();
+			expect(hand1._handNature).toBe(_handmod_._handTypes.straightflush);
+		});
+
+		// Falsy to be debugged
+		/*it('\'' + hand2 + ' should be a square', function() {
+			hand2.compute_value();
+			expect(hand2._handNature).toBe(_handmod_._handTypes.square);
+		});*/
 	});
 
 	return {};

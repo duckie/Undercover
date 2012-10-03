@@ -46,7 +46,16 @@ define(['underscore'], function(_){
         return create_protected_object(uc_object_prototype, properties);
     }
 
+    /**
+    * Assumes that the given arguments are numbers
+    */
+    function integer_comparison(int1, int2)
+    {
+        return int1 === int2 ? 0 : ( int1 < int2 ? -1 : 1);
+    }
+
     return create_uc_object({
+        compareInt: integer_comparison,
         createUCObject: create_uc_object,
         createObject: create_object,
         createProtectedObject: create_protected_object

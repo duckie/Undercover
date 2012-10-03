@@ -7,7 +7,8 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     * Working with enum of objects is good in javascript
     */
     const hand_types = {
-        straightflush: {value:7},
+        straightflush: {value:8},
+        square: {value:7},
         full: {value:6},
         flush: {value:5},
         straight: {value:4},
@@ -25,8 +26,87 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     * value of the hand.
     */
     var hand_prototype = {
-        compute_value:function(){
 
+        /**
+        * Computes the nature of the hand and all the needed charasteristics to compare the hand with another one
+        *
+        * The property _handNature will be generated containing what the hand is
+        * The property _compareValues is to be used internally to compare different hands
+        */
+        compute_value:function(){
+            var flat_values = _.pluck(this.cards,'_value');
+            var occurences = {};
+            var hand_occurence_pattern = null;
+
+            // Is color
+            var first_card_color = this.cards[0]._color;
+            var is_flush = _.all(this.cards, function(card) { return first_card_color === card._color; });
+
+            // Is a straight
+            var top_value = this.cards[0]._value + 1;
+            var is_straight = _.reduce(this.cards, function(ok, card){
+                ok = ok && (1 === (top_value - card._value));
+                top_value = card._value;
+                return ok;
+            }, true);
+
+            if(is_flush || is_straight) {
+                this._compareValues = flat_values;
+                if(is_flush && is_straight) {
+                    this._handNature = hand_types.straightflush;
+                }
+                else if(is_flush) {
+                    this._handNature = hand_types.flush;   
+                }
+                else {
+                    this._handNature = hand_types.straight;
+                }
+            }
+            else {
+                // Counting occurences of each value
+                _.each(this.cards, function(card) {
+                    var value = card._value;
+                    //occurences[value] = occurences[value] ? 1 : occurences[value] + 1;
+                    if(_.has(occurences,value)) {
+                        ++(occurences[value].count);
+                    }
+                    else {
+                        occurences[value] = {val:value, count:1};
+                    }
+                });
+
+                // Get rid of the keys and sorts
+                occurences = _.values(occurences);
+                occurences.sort(function(elem1,elem2){ 
+                    var on_count = _ucengine_.compareInt(elem1.count, elem2.count);
+                    return (0 === on_count) ? -_ucengine_.compareInt(elem1.val, elem2.val) : on_count;
+                });
+
+                this._compareValues = _.pluck(occurences,'val');
+
+                hand_occurence_pattern = _.pluck(occurences,'count');
+                if(_.isEqual([4,1], hand_occurence_pattern)) {
+                    this._handNature = hand_types.square;
+                }
+                else if(_.isEqual([3,2], hand_occurence_pattern)) {
+                    this._handNature = hand_types.full;
+                }
+                else if(_.isEqual([3,1,1], hand_occurence_pattern)) {
+                    this._handNature = hand_types.trips;
+                }
+                else if(_.isEqual([2,2,1], hand_occurence_pattern)) {
+                    this._handNature = hand_types.twopairs;
+                }
+                else if(_.isEqual([2,1,1,1], hand_occurence_pattern)) {
+                    this._handNature = hand_types.pair;
+                }
+                else {
+                    this._handNature = hand_types.highcard;
+                }
+            }
+
+            //  For any hand
+            this._compareValues.unshift(this._handNature.value);
         },
 
         toString:function() {
@@ -77,7 +157,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
             }
 
             // Checking that everybody is a card
-            elements_are_cards = _.reduce(iArg, function(current_state, elem) { return (current_state && _deckmod_.isCard(elem)); }, true);
+            elements_are_cards = _.all(iArg, _deckmod_.isCard);
             if(true !== elements_are_cards)
             {
                 throw {
@@ -156,6 +236,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     };
 
     return _ucengine_.createUCObject({
+        _handTypes: hand_types,
         createHand: create_hand
     });
 });

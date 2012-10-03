@@ -21,7 +21,7 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     */
     card_prototype = _ucengine_.createUCObject({
         compare: function(card){
-            return (this.value() === card.value()) ? 0 : ((this.value() < card.value()) ? -1 : 1);
+            return (this._value === card._value) ? 0 : ((this._value < card._value) ? -1 : 1);
         }
     });
 
@@ -40,8 +40,8 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
         const m_str = iStrRep;
 
         var card = _ucengine_.createProtectedObject(card_prototype, {
-           value: function() { return m_value; },
-           color: function() { return m_color; },
+           _value: m_value,
+           _color: m_color,
            toString: function() { return m_str; },
         });
 
