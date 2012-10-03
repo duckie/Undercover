@@ -78,7 +78,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
                 // Get rid of the keys and sorts
                 occurences = _.values(occurences);
                 occurences.sort(function(elem1,elem2){ 
-                    var on_count = _ucengine_.compareInt(elem1.count, elem2.count);
+                    var on_count = -_ucengine_.compareInt(elem1.count, elem2.count);
                     return (0 === on_count) ? -_ucengine_.compareInt(elem1.val, elem2.val) : on_count;
                 });
 

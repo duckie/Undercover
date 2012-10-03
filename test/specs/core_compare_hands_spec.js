@@ -59,11 +59,45 @@ define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( 
 			expect(hand1._handNature).toBe(_handmod_._handTypes.straightflush);
 		});
 
-		// Falsy to be debugged
-		/*it('\'' + hand2 + ' should be a square', function() {
+		it('\'' + hand2 + ' should be a four of a kind', function() {
 			hand2.compute_value();
 			expect(hand2._handNature).toBe(_handmod_._handTypes.square);
-		});*/
+		});
+
+		it('\'' + hand3 + ' should be a full house', function() {
+			hand3.compute_value();
+			expect(hand3._handNature).toBe(_handmod_._handTypes.full);
+		});
+		
+		it('\'' + hand4 + ' should be a flush', function() {
+			hand4.compute_value();
+			expect(hand4._handNature).toBe(_handmod_._handTypes.flush);
+		});
+
+		it('\'' + hand5 + ' should be a straight', function() {
+			hand5.compute_value();
+			expect(hand5._handNature).toBe(_handmod_._handTypes.straight);
+		});
+
+		it('\'' + hand6 + ' should be three of a kind', function() {
+			hand6.compute_value();
+			expect(hand6._handNature).toBe(_handmod_._handTypes.trips);
+		});
+
+		it('\'' + hand7 + ' should be two pairs', function() {
+			hand7.compute_value();
+			expect(hand7._handNature).toBe(_handmod_._handTypes.twopairs);
+		});
+
+		it('\'' + hand8 + ' should be one pair', function() {
+			hand8.compute_value();
+			expect(hand8._handNature).toBe(_handmod_._handTypes.pair);
+		});
+
+		it('\'' + hand9 + ' should be a high card', function() {
+			hand9.compute_value();
+			expect(hand9._handNature).toBe(_handmod_._handTypes.highcard);
+		});
 	});
 
 	return {};
