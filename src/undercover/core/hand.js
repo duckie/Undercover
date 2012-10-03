@@ -2,6 +2,22 @@
 define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
 
     /**
+    * Hand types enum
+    *
+    * Working with enum of objects is good in javascript
+    */
+    const hand_types = {
+        straightflush: {value:7},
+        full: {value:6},
+        flush: {value:5},
+        straight: {value:4},
+        trips: {value:3},
+        twopairs: {value:2},
+        pair: {value:1},
+        highcard: {value:0}
+    };
+
+    /**
     * Hand interface
     *
     * A hand is a set of 5 cards. This object helps you
@@ -10,12 +26,11 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     */
     var hand_prototype = {
         compute_value:function(){
-            
+
         },
 
         toString:function() {
-            var that = this;
-            return _.reduce(that.cards, function(str,card){ return str + card.toString(); }, '');
+            return this.cards.join('');
         }
     };
 
@@ -74,7 +89,13 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
             cards = iArg;
         }
 
-        cards = _.uniq(cards);
+        // Sort the cards by compute_value
+        cards.sort(function(card1, card2){
+            return (card1.value() === card2.value()) ? 0 : ((card1.value() < card2.value()) ? 1 : -1);
+        });
+
+        cards = _.uniq(cards, true);
+        
         if(5 !== cards.length) {
             throw {
                 name:'argument error',

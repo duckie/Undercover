@@ -1,17 +1,17 @@
 // This module is designed for RequireJS()
 define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
 
-	var dictionary = {};
+    var dictionary = {};
     var card_prototype = null;
-	var basic_deck = null;
-	var deck_prototype = null;
+    var basic_deck = null;
+    var deck_prototype = null;
 
-	const card_color = _ucengine_.createUCObject({
-		heart:0,
-		club:1,
-		diamond:2,
-		spade:3
-	});
+    const card_color = _ucengine_.createUCObject({
+        heart:0,
+        club:1,
+        diamond:2,
+        spade:3
+    });
 
     /**
     * The card prototype
@@ -21,7 +21,7 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     */
     card_prototype = {};
 
-	/**
+    /**
     * Card factory
     *
     * create_card creates a object which represents a given card with
@@ -31,19 +31,19 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     */
     function create_card(iValue, iColor, iStrRep)
     {
-    	const m_value = iValue;
-    	const m_color = iColor;
-    	const m_str = iStrRep;
+        const m_value = iValue;
+        const m_color = iColor;
+        const m_str = iStrRep;
 
-    	var card = _ucengine_.createProtectedObject(card_prototype, {
-    	   value: function() { return m_value; },
-    	   color: function() { return m_color; },
+        var card = _ucengine_.createProtectedObject(card_prototype, {
+           value: function() { return m_value; },
+           color: function() { return m_color; },
            toString: function() { return m_str; }
-    	});
+        });
 
-    	dictionary[iStrRep] = card;
+        dictionary[iStrRep] = card;
 
-    	return card;
+        return card;
     };
 
     function is_a_card(iObj)
@@ -53,13 +53,13 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
 
     var get_in_dictionary = function(iStringRep)
     {
-    	if(_.isString(iStringRep) && _.has(dictionary,iStringRep)) {
-    		return dictionary[iStringRep];
-    	}
-    	return null;
+        if(_.isString(iStringRep) && _.has(dictionary,iStringRep)) {
+            return dictionary[iStringRep];
+        }
+        return null;
     }
 
-	basic_deck = (function(){
+    basic_deck = (function(){
         var deck = [];
 
         // Hearts
@@ -139,45 +139,45 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     };
 
     function create_deck() {
-    	var permutation = [];
-    	var index = 0;
-    	var result_deck = [];
-    	var deck_object = null;
-    	var generator = _random_();
+        var permutation = [];
+        var index = 0;
+        var result_deck = [];
+        var deck_object = null;
+        var generator = _random_();
 
-    	for(index = 0; index < 52; index++) {
-    		permutation[index] = [index,generator()];
-    	}
+        for(index = 0; index < 52; index++) {
+            permutation[index] = [index,generator()];
+        }
 
-    	permutation.sort(function(elem1, elem2){
-    		if( (elem1[1] - elem2[1]) === 0) {
-    			return 0;
-    		}
-    		else {
-    			if( (elem1[1] - elem2[1]) < 0) {
-    				return -1;
-    			}
-    			else {
-    				return 1;
-    			}
-    		}
-    	});
+        permutation.sort(function(elem1, elem2){
+            if( (elem1[1] - elem2[1]) === 0) {
+                return 0;
+            }
+            else {
+                if( (elem1[1] - elem2[1]) < 0) {
+                    return -1;
+                }
+                else {
+                    return 1;
+                }
+            }
+        });
 
-    	for(index = 0; index < 52; index++) {
-    		result_deck[result_deck.length] = basic_deck[permutation[index][0]];
-    	}
+        for(index = 0; index < 52; index++) {
+            result_deck[result_deck.length] = basic_deck[permutation[index][0]];
+        }
 
-    	deck_object = _ucengine_.createObject(deck_prototype);
-    	deck_object.cards = result_deck;
+        deck_object = _ucengine_.createObject(deck_prototype);
+        deck_object.cards = result_deck;
 
-    	return deck_object;
+        return deck_object;
     };
 
     // Declaring the public interface
     return _ucengine_.createUCObject({
-    	_colorCodes: card_color,
-    	newShuffledDeck: create_deck,
-    	getCardFromStr: get_in_dictionary,
+        _colorCodes: card_color,
+        newShuffledDeck: create_deck,
+        getCardFromStr: get_in_dictionary,
         isCard: is_a_card
     });
 });

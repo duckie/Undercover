@@ -2,7 +2,7 @@
 define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( _, _card_, _handmod_) {
 	describe('Testing hand construction', function() {
 		
-		var hand1 = 'Ah7c8cJcJs';
+		var hand1 = 'AhJcJs8c7c';
 		var hand2 = 'sh3hJcJcJs';
 		var hand3 = 'Ah7c8cJc';
 
