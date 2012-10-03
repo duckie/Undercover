@@ -19,7 +19,11 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     * It does have any method but can let us check if we manipulate
     * card objects having the same prototype.
     */
-    card_prototype = {};
+    card_prototype = _ucengine_.createUCObject({
+        compare: function(card){
+            return (this.value() === card.value()) ? 0 : ((this.value() < card.value()) ? -1 : 1);
+        }
+    });
 
     /**
     * Card factory
@@ -38,7 +42,7 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
         var card = _ucengine_.createProtectedObject(card_prototype, {
            value: function() { return m_value; },
            color: function() { return m_color; },
-           toString: function() { return m_str; }
+           toString: function() { return m_str; },
         });
 
         dictionary[iStrRep] = card;

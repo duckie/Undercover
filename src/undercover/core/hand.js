@@ -89,9 +89,8 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
             cards = iArg;
         }
 
-        // Sort the cards by compute_value
         cards.sort(function(card1, card2){
-            return (card1.value() === card2.value()) ? 0 : ((card1.value() < card2.value()) ? 1 : -1);
+            return -(card1.compare(card2));
         });
 
         cards = _.uniq(cards, true);
