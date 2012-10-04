@@ -120,9 +120,9 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
                 hand.compute_value();
             }
 
-            while(0 === result && i < this._compareValues.length) {
-                result = _ucengine_.compareInt(this._compareValues[i], hand._compareValues[i]);
-                ++i;
+            while(0 === result && index < this._compareValues.length) {
+                result = _ucengine_.compareInt(this._compareValues[index], hand._compareValues[index]);
+                ++index;
             }
 
             return result;

@@ -44,61 +44,129 @@ define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( 
 	});
 
 	describe('Testing hand value computation', function() {
-		var hand1 = _handmod_.createHand('QhJhTh9h8h');
-		var hand2 = _handmod_.createHand('3h3s3d3c2c');
-		var hand3 = _handmod_.createHand('5h5d5c9c9h');
-		var hand4 = _handmod_.createHand('KhJh5h2h7h');
-		var hand5 = _handmod_.createHand('5h6d7d8c9s');
-		var hand6 = _handmod_.createHand('Js8hJhJd7c');
-		var hand7 = _handmod_.createHand('Js8h8cJd2c');
-		var hand8 = _handmod_.createHand('5s8h8cJd2c');
-		var hand9 = _handmod_.createHand('5sAh8cJd2c');
+		var hand1 = 'QhJhTh9h8h';
+		var hand2 = '3h3s3d3c2c';
+		var hand3 = '5h5d5c9c9h';
+		var hand4 = 'KhJh5h2h7h';
+		var hand5 = '5h6d7d8c9s';
+		var hand6 = 'Js8hJhJd7c';
+		var hand7 = 'Js8h8cJd2c';
+		var hand8 = '5s8h8cJd2c';
+		var hand9 = '5sAh8cJd2c';
 
 		it('\'' + hand1 + ' should be a straigth flush', function() {
-			hand1.compute_value();
-			expect(hand1._handNature).toBe(_handmod_._handTypes.straightflush);
+			var hand = _handmod_.createHand(hand1);
+			hand.compute_value();
+			expect(hand._handNature).toBe(_handmod_._handTypes.straightflush);
 		});
 
 		it('\'' + hand2 + ' should be a four of a kind', function() {
-			hand2.compute_value();
-			expect(hand2._handNature).toBe(_handmod_._handTypes.square);
+			var hand = _handmod_.createHand(hand2);
+			hand.compute_value();
+			expect(hand._handNature).toBe(_handmod_._handTypes.square);
 		});
 
 		it('\'' + hand3 + ' should be a full house', function() {
-			hand3.compute_value();
-			expect(hand3._handNature).toBe(_handmod_._handTypes.full);
+			var hand = _handmod_.createHand(hand3);
+			hand.compute_value();
+			expect(hand._handNature).toBe(_handmod_._handTypes.full);
 		});
 		
 		it('\'' + hand4 + ' should be a flush', function() {
-			hand4.compute_value();
-			expect(hand4._handNature).toBe(_handmod_._handTypes.flush);
+			var hand = _handmod_.createHand(hand4);
+			hand.compute_value();
+			expect(hand._handNature).toBe(_handmod_._handTypes.flush);
 		});
 
 		it('\'' + hand5 + ' should be a straight', function() {
-			hand5.compute_value();
-			expect(hand5._handNature).toBe(_handmod_._handTypes.straight);
+			var hand = _handmod_.createHand(hand5);
+			hand.compute_value();
+			expect(hand._handNature).toBe(_handmod_._handTypes.straight);
 		});
 
 		it('\'' + hand6 + ' should be three of a kind', function() {
-			hand6.compute_value();
-			expect(hand6._handNature).toBe(_handmod_._handTypes.trips);
+			var hand = _handmod_.createHand(hand6);
+			hand.compute_value();
+			expect(hand._handNature).toBe(_handmod_._handTypes.trips);
 		});
 
 		it('\'' + hand7 + ' should be two pairs', function() {
-			hand7.compute_value();
-			expect(hand7._handNature).toBe(_handmod_._handTypes.twopairs);
+			var hand = _handmod_.createHand(hand7);
+			hand.compute_value();
+			expect(hand._handNature).toBe(_handmod_._handTypes.twopairs);
 		});
 
 		it('\'' + hand8 + ' should be one pair', function() {
-			hand8.compute_value();
-			expect(hand8._handNature).toBe(_handmod_._handTypes.pair);
+			var hand = _handmod_.createHand(hand8);
+			hand.compute_value();
+			expect(hand._handNature).toBe(_handmod_._handTypes.pair);
 		});
 
 		it('\'' + hand9 + ' should be a high card', function() {
-			hand9.compute_value();
-			expect(hand9._handNature).toBe(_handmod_._handTypes.highcard);
+			var hand = _handmod_.createHand(hand9);
+			hand.compute_value();
+			expect(hand._handNature).toBe(_handmod_._handTypes.highcard);
+		});
+	});
+
+	describe('Testing hand comparison', function() {
+		var compare_case1 = { hand1: 'QhJhTh9h8h', hand2: '3h3s3d3c2c', expected: 1};
+		
+		/*function test_case_message(testcase) {
+			str = '\'' + testcase.hand1 + '\' ';
+			switch(testcase.expected) {
+				case -1:
+					str += 'should be lesser than';
+					break;
+				case 1:
+					str += 'should be greater than';
+					break;
+				default:
+					str += 'should have the same value than';
+			};
+			str += ' \'' + testcase.hand2 + '\'.';
+			return str;
+		}*/
+
+		function execute_test_case(testcase) {
+			var hand1 = _handmod_.createHand(testcase.hand1);
+			var hand2 = _handmod_.createHand(testcase.hand2);
+			expect(hand1.compare(hand2)).toEqual(testcase.expected);
+		}
+
+		it("Set of hand comparison", function() {
+
+			var compare_cases = [
+			{hand1: 'QhJhTh9h8h', hand2: '3h3s3d3c2c', expected: 1},
+			{hand1: '3h3s3d3c2c', hand2: 'QhJhTh9h8h', expected: -1},
+			{hand1: '3h3s3d3c2c', hand2: '5h5d5c9c9h', expected: 1},
+			{hand1: '5h5d5c9c9h', hand2: '3h3s3d3c2c', expected: -1},
+			{hand1: '5h5d5c9c9h', hand2: 'KhJh5h2h7h', expected: 1},
+			{hand1: 'KhJh5h2h7h', hand2: '5h5d5c9c9h', expected: -1},
+			{hand1: 'KhJh5h2h7h', hand2: '5h6d7d8c9s', expected: 1},
+			{hand1: '5h6d7d8c9s', hand2: 'KhJh5h2h7h', expected: -1},
+			{hand1: '5h6d7d8c9s', hand2: 'Js8hJhJd7c', expected: 1},
+			{hand1: 'Js8hJhJd7c', hand2: '5h6d7d8c9s', expected: -1},
+			{hand1: 'Js8hJhJd7c', hand2: 'Js8h8cJd2c', expected: 1},
+			{hand1: 'Js8h8cJd2c', hand2: 'Js8hJhJd7c', expected: -1},
+			{hand1: 'Js8h8cJd2c', hand2: '5s8h8cJd2c', expected: 1},
+			{hand1: '5s8h8cJd2c', hand2: 'Js8h8cJd2c', expected: -1},
+			{hand1: '5s8h8cJd2c', hand2: '5sAh8cJd2c', expected: 1},
+			{hand1: '5sAh8cJd2c', hand2: '5s8h8cJd2c', expected: -1},
+			{hand1: 'KhQhJhTh9h', hand2: 'QhJhTh9h8h', expected: 1},
+			{hand1: '3h3s3d3c2c', hand2: '4h4s4d6c4c', expected: -1},
+			{hand1: '5h5d5c9c9h', hand2: '5h5d5c6c6h', expected: 1},
+			{hand1: '5h5d5c9c9h', hand2: '5h5d5cTcTh', expected: -1},
+			{hand1: '5h5d5cAcAh', hand2: '8h8d8c9c9h', expected: -1},
+			{hand1: 'JhJd8cAc8h', hand2: 'JhJd9cAc9h', expected: -1}
+			];
+
+			_.each(compare_cases, function(compare_case){
+				execute_test_case(compare_case);
+			});
 		});
 	});
 
 	return {};
 });
+
