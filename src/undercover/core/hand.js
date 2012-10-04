@@ -109,6 +109,25 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
             this._compareValues.unshift(this._handNature.value);
         },
 
+        compare: function(hand){
+            var result = 0;
+            var index = 0;
+
+            if(_.isUndefined(this._compareValues)) {
+                this.compute_value();
+            }
+            if(_.isUndefined(hand._compareValues)) {
+                hand.compute_value();
+            }
+
+            while(0 === result && i < this._compareValues.length) {
+                result = _ucengine_.compareInt(this._compareValues[i], hand._compareValues[i]);
+                ++i;
+            }
+
+            return result;
+        },
+
         toString:function() {
             return this.cards.join('');
         }
