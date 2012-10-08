@@ -6,7 +6,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     *
     * Working with enum of objects is good in javascript
     */
-    const hand_types = {
+    const hand_types = _ucengine_.createUCObject({
         straightflush: {value:8},
         square: {value:7},
         full: {value:6},
@@ -16,7 +16,34 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         twopairs: {value:2},
         pair: {value:1},
         highcard: {value:0}
-    };
+    });
+
+
+    /**
+    * Takes any string like "AhKs9h..." and returns the matching array of cards
+    *
+    * 
+    */
+    function parse_hands(hands_str)
+    {
+        var cards = [];
+        var index=0;
+        var size = Math.floor(hands_str.length / 2);
+        for(index = 0; index < size; ++index)
+        {
+            cardId = hands_str.slice( 2*index , 2*(index+1) );
+            current_card = _deckmod_.getCardFromStr(cardId);
+            if(current_card === null) {
+                throw {
+                    name:'parse error',
+                    message:'The string ' + hands_str + ' is ill-formed for hand construction, the card "' + cardId + '" does not exist.'
+                };
+            }
+            cards.push(current_card);
+        }
+
+        return cards;
+    }
 
     /**
     * Hand interface
@@ -25,8 +52,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     * to create the set in an easy way and computes the
     * value of the hand.
     */
-    var hand_prototype = {
-
+    var hand_prototype = _ucengine_.createUCObject({
         /**
         * Computes the nature of the hand and all the needed charasteristics to compare the hand with another one
         *
@@ -131,7 +157,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         toString:function() {
             return this.cards.join('');
         }
-    };
+    });
 
     function create_hand(iArg)
     {
@@ -152,19 +178,7 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
                 };
             }
 
-            cards = [];
-            for(index = 0; index < 5; ++index)
-            {
-                cardId = iArg.slice( 2*index , 2*(index+1) );
-                current_card = _deckmod_.getCardFromStr(cardId);
-                if(current_card === null) {
-                    throw {
-                        name:'parse error',
-                        message:'The string ' + iArg + ' is ill-formed for hand construction, the hand "' + cardId + '" does not exist.'
-                    };
-                }
-                cards.push(current_card);
-            }
+            cards = parse_hands(iArg);
         }
 
         if(_.isArray(iArg)) {
@@ -214,22 +228,34 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     * used to compute which poker hands the player get, depending
     * on the played variation.
     */
-    var hand_set_prototype = { 
+    var hand_set_prototype = _ucengine_.createUCObject({
        toString:function () {
-            var that = this;
-            var str_out = "On board: ";
+            return "On board: " + this.board.join('') + ', in the hand: ' + this.hole_cards.join('');
+        },
+
+        /**
+        * Finds the best hand and the worst
+        */
+        computeHighLo: function() {
+            var nb_hole_to_pick = 0;
+            for(nb_hole_to_pick = this.nb_hole_picked_min; nb_hole_to_pick <= this.nb_hole_picked_max; ++nb_hole_to_pick)
+            {
+
+            }
         }
-    };
+
+    });
 
     /**
     * Creates a full handset
     * 
     * 
     */
-    var create_hand_set = function(main_arg) {
+    function create_hand_set(main_arg) {
        // The default is the texas holdem config
         var hole_cards = [];
-        var nb_hole_picked = 2;
+        var nb_hole_picked_min = 2;
+        var nb_hole_picked_max = 2;
         var common_cards = [];
         var nb_common_picked = 5;
         var hand_set_object = null;
@@ -242,16 +268,28 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         if(_.isObject(main_arg))
         {
             hole_cards = main_arg.hole_cards || [];
-            nb_hole_picked = main_arg.nb_hole_cards_to_pick || 2;
+            nb_hole_picked_min = main_arg.nb_hole_cards_to_pick_min || 2;
+            nb_hole_picked_max =  main_arg.nb_hole_cards_to_pick_max || 2;
             common_cards = main_arg.common_cards || [];
             nb_common_picked = main_arg.nb_board_cards_to_pick || 5;
+
+            if(_.isString(hole_cards)) {
+                hole_cards = parse_hands(hole_cards);
+            }
+
+            if(_.isString(common_cards)) {
+                common_cards = parse_hands(common_cards);
+            }
         }
 
-        hand_set_object = _ucengine_.createObject(hand_set_prototype);
-        hand_set_object.hole_cards = hole_cards;
-        hand_set_object.hole_pick = nb_hole_picked;
-        hand_set_object.board = common_cards;
-        hand_set_object.board_pick = nb_common_picked;
+        hand_set_object = _ucengine_.createProtectedObject(hand_set_prototype, {
+            hole_cards: hole_cards,
+            hole_pick_min: nb_hole_picked_min,
+            hole_pick_max: nb_hole_picked_max,
+            board: common_cards,
+            board_pick: nb_common_picked
+        });
+
     };
 
     return _ucengine_.createUCObject({

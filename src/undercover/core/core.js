@@ -19,11 +19,17 @@ define(['underscore'], function(_){
     * 
     * There is different methods to implement differential inhderitance in
     * javascript so I use this method to let me test different ways to do it.
-    * This could also be ued to optimize depending on the running platform.
+    * This could also be used to optimize depending on the running platform.
     */
     function create_object (proto, properties)
     {
-        return Object.create(proto, properties);
+        var create_obj_parameter = {};
+        if(_.isObject(properties)) {
+            _.each(properties, function(elem_value,key) {
+                create_obj_parameter[key] = {value: elem_value, enumerable:true, writable:true};
+            });
+        }
+        return Object.create(proto, create_obj_parameter);
     };
 
     /**
@@ -35,15 +41,29 @@ define(['underscore'], function(_){
     function create_protected_object(proto, properties)
     {
         var create_obj_parameter = {};
-        _.each(properties, function(elem_value,key) {
-            create_obj_parameter[key] = {value: elem_value, enumerable:true, writable:false};
-        });
-        return create_object(proto, create_obj_parameter);
+        if(_.isObject(properties)) {
+            _.each(properties, function(elem_value,key) {
+                create_obj_parameter[key] = {value: elem_value, enumerable:true, writable:false};
+            });
+        }
+        return Object.create(proto, create_obj_parameter);
     };
 
     function create_uc_object(properties)
     {
         return create_protected_object(uc_object_prototype, properties);
+    }
+
+    /**
+    * Basic assertion
+    */
+    function assert(iAssertion) {
+        if(!iAssertion) {
+            throw {
+                name:'Undercover internal',
+                message: 'assertion failed'
+            }    
+        }
     }
 
     /**
@@ -55,6 +75,7 @@ define(['underscore'], function(_){
     }
 
     return create_uc_object({
+        assert: assert,
         compareInt: integer_comparison,
         createUCObject: create_uc_object,
         createObject: create_object,

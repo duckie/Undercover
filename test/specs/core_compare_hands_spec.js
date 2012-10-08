@@ -111,22 +111,6 @@ define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( 
 
 	describe('Testing hand comparison', function() {
 		var compare_case1 = { hand1: 'QhJhTh9h8h', hand2: '3h3s3d3c2c', expected: 1};
-		
-		/*function test_case_message(testcase) {
-			str = '\'' + testcase.hand1 + '\' ';
-			switch(testcase.expected) {
-				case -1:
-					str += 'should be lesser than';
-					break;
-				case 1:
-					str += 'should be greater than';
-					break;
-				default:
-					str += 'should have the same value than';
-			};
-			str += ' \'' + testcase.hand2 + '\'.';
-			return str;
-		}*/
 
 		function execute_test_case(testcase) {
 			var hand1 = _handmod_.createHand(testcase.hand1);

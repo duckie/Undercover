@@ -20,6 +20,9 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     * card objects having the same prototype.
     */
     card_prototype = _ucengine_.createUCObject({
+        toString: function() { 
+            return this._str;
+        },
         compare: function(card){
             return (this._value === card._value) ? 0 : ((this._value < card._value) ? -1 : 1);
         }
@@ -42,7 +45,7 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
         var card = _ucengine_.createProtectedObject(card_prototype, {
            _value: m_value,
            _color: m_color,
-           toString: function() { return m_str; },
+           _str: m_str
         });
 
         dictionary[iStrRep] = card;
