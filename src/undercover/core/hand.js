@@ -1,5 +1,5 @@
 // This module is designed for RequireJS()
-define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
+define(['underscore','./core','./card', './set'],function(_, _ucengine_ , _deckmod_, _set_ ) {
 
     /**
     * Hand types enum
@@ -236,12 +236,41 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
         /**
         * Finds the best hand and the worst
         */
-        computeHighLo: function() {
-            var nb_hole_to_pick = 0;
-            for(nb_hole_to_pick = this.nb_hole_picked_min; nb_hole_to_pick <= this.nb_hole_picked_max; ++nb_hole_to_pick)
-            {
+        computeHighest: function() {
+            // Input contract
+            _ucengine_.assert(0 <= this.hole_pick_min && this.hole_pick_max < 5);
 
+            var nb_hole_min = (0 < this.hole_pick_min) ? this.hole_pick_min : 1;
+            var holes = this.hole_cards;
+            var board = this.board;
+            var board_combinations = null;
+            var current_hand = null;
+            var hands = this._possibleHands = [];
+
+            // Worst hand
+            var higher_hand = create_hand('2h3s4d5c7h');
+
+            if(0 === this.hole_pick_min) {
+                _.each(_set_.findCombinations(board, 5), function(combination) {
+                    current_hand = create_hand(combination);
+                    hands.push(current_hand);
+                    higher_hand = (-1 === higher_hand.compare(current_hand)) ? current_hand : higher_hand;
+                });
             }
+
+            for(nb_hole_to_pick = nb_hole_min; nb_hole_to_pick <= this.hole_pick_max; ++nb_hole_to_pick)
+            {
+                board_combinations =  _set_.findCombinations(board, 5 -  nb_hole_to_pick)
+                _.each(_set_.findCombinations(holes, nb_hole_to_pick), function(holes_to_use){
+                    _.each(board_combinations, function(board_to_use) {
+                        current_hand = create_hand(holes_to_use.concat(board_to_use));
+                        hands.push(current_hand);
+                        higher_hand = (-1 === higher_hand.compare(current_hand)) ? current_hand : higher_hand;     
+                    });
+                });
+            }
+
+            return higher_hand;
         }
 
     });
@@ -254,24 +283,16 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
     function create_hand_set(main_arg) {
        // The default is the texas holdem config
         var hole_cards = [];
-        var nb_hole_picked_min = 2;
-        var nb_hole_picked_max = 2;
+        var pick_min = 0;
+        var pick_max = 2;
         var common_cards = [];
-        var nb_common_picked = 5;
         var hand_set_object = null;
-
-        if(_.isString(main_arg))
-        {
-            // Parses the string to transform
-        }
         
         if(_.isObject(main_arg))
         {
             hole_cards = main_arg.hole_cards || [];
-            nb_hole_picked_min = main_arg.nb_hole_cards_to_pick_min || 2;
-            nb_hole_picked_max =  main_arg.nb_hole_cards_to_pick_max || 2;
+            pick_min = main_arg.pick_min || 0;
             common_cards = main_arg.common_cards || [];
-            nb_common_picked = main_arg.nb_board_cards_to_pick || 5;
 
             if(_.isString(hole_cards)) {
                 hole_cards = parse_hands(hole_cards);
@@ -280,20 +301,23 @@ define(['underscore','./core','./card'],function(_, _ucengine_ , _deckmod_ ) {
             if(_.isString(common_cards)) {
                 common_cards = parse_hands(common_cards);
             }
+
+            pick_max =  main_arg.pick_max || hole_cards.length;
         }
 
         hand_set_object = _ucengine_.createProtectedObject(hand_set_prototype, {
             hole_cards: hole_cards,
-            hole_pick_min: nb_hole_picked_min,
-            hole_pick_max: nb_hole_picked_max,
-            board: common_cards,
-            board_pick: nb_common_picked
+            hole_pick_min: pick_min,
+            hole_pick_max: pick_max,
+            board: common_cards
         });
 
+        return hand_set_object;
     };
 
     return _ucengine_.createUCObject({
         _handTypes: hand_types,
-        createHand: create_hand
+        createHand: create_hand,
+        createHandSet : create_hand_set
     });
 });

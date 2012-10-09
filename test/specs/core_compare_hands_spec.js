@@ -151,6 +151,21 @@ define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( 
 		});
 	});
 
+	describe('Testing handsets', function() {
+		it("Set of hold'em hands", function() {
+			var handset = _handmod_.createHandSet({
+				pick_min:0,
+				pick_max:2, 
+				hole_cards:'As7h',
+				common_cards:'Ks7sQd9sJs'
+			});
+
+			var hand = handset.computeHighest();
+			expect(hand.toString()).toBe('AsKsJs9s7s');
+			//console.log(hand);
+		});
+	});
+
 	return {};
 });
 
