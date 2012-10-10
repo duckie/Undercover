@@ -2,7 +2,7 @@
 define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( _, _card_, _handmod_) {
     describe('Testing hand construction', function() {
         
-        var hand1 = 'AhJcJs8c7c';
+        var hand1 = 'JcJsAh8c7c';
         var hand2 = 'sh3hJcJcJs';
         var hand3 = 'Ah7c8cJc';
 
@@ -56,55 +56,46 @@ define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( 
 
         it('\'' + hand1 + ' should be a straigth flush', function() {
             var hand = _handmod_.createHand(hand1);
-            hand.compute_value();
             expect(hand._handNature).toBe(_handmod_._handTypes.straightflush);
         });
 
         it('\'' + hand2 + ' should be a four of a kind', function() {
             var hand = _handmod_.createHand(hand2);
-            hand.compute_value();
             expect(hand._handNature).toBe(_handmod_._handTypes.square);
         });
 
         it('\'' + hand3 + ' should be a full house', function() {
             var hand = _handmod_.createHand(hand3);
-            hand.compute_value();
             expect(hand._handNature).toBe(_handmod_._handTypes.full);
         });
         
         it('\'' + hand4 + ' should be a flush', function() {
             var hand = _handmod_.createHand(hand4);
-            hand.compute_value();
             expect(hand._handNature).toBe(_handmod_._handTypes.flush);
         });
 
         it('\'' + hand5 + ' should be a straight', function() {
             var hand = _handmod_.createHand(hand5);
-            hand.compute_value();
             expect(hand._handNature).toBe(_handmod_._handTypes.straight);
         });
 
         it('\'' + hand6 + ' should be three of a kind', function() {
             var hand = _handmod_.createHand(hand6);
-            hand.compute_value();
             expect(hand._handNature).toBe(_handmod_._handTypes.trips);
         });
 
         it('\'' + hand7 + ' should be two pairs', function() {
             var hand = _handmod_.createHand(hand7);
-            hand.compute_value();
             expect(hand._handNature).toBe(_handmod_._handTypes.twopairs);
         });
 
         it('\'' + hand8 + ' should be one pair', function() {
             var hand = _handmod_.createHand(hand8);
-            hand.compute_value();
             expect(hand._handNature).toBe(_handmod_._handTypes.pair);
         });
 
         it('\'' + hand9 + ' should be a high card', function() {
             var hand = _handmod_.createHand(hand9);
-            hand.compute_value();
             expect(hand._handNature).toBe(_handmod_._handTypes.highcard);
         });
     });
@@ -166,7 +157,7 @@ define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( 
         it("Set of omaha hands", function() {
             var handset = _handmod_.createHandSet({pick_min:2, pick_max:2, hole_cards:'QhQs4d8d', common_cards:'Th9h5cAh6h'});
             var hand = handset.computeHighest();
-            expect(hand.toString()).toBe('AhQhQsTh9h');
+            expect(hand.toString()).toBe('QhQsAhTh9h');
 
             //console.log(hand);
         });

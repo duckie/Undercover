@@ -53,15 +53,55 @@ define(['underscore','./core','./card', './set'],function(_, _ucengine_ , _deckm
     * value of the hand.
     */
     var hand_prototype = _ucengine_.createUCObject({
+        compare: function(hand){
+            var result = 0;
+            var index = 0;
+
+            _ucengine_.assert(! _.isUndefined(this._compareValues) && ! _.isUndefined(hand._compareValues))
+
+            /*if(_.isUndefined(this._compareValues)) {
+                this.compute_value();
+            }
+            if(_.isUndefined(hand._compareValues)) {
+                hand.compute_value();
+            }*/
+
+            while(0 === result && index < this._compareValues.length) {
+                result = _ucengine_.compareInt(this._compareValues[index], hand._compareValues[index]);
+                ++index;
+            }
+
+            return result;
+        },
+
+        toString:function() {
+            return this.cards.join('');
+        }
+    });
+
+    function create_hand(iArg)
+    {
+        var cards = null;
+        var exception = null;
+        var index = 0;
+        var current_card = 0;
+        var hand_object = null;
+        var cardId = null;
+        var elements_are_cards = false;
+
+
         /**
         * Computes the nature of the hand and all the needed charasteristics to compare the hand with another one
         *
         * The property _handNature will be generated containing what the hand is
-        * The property _compareValues is to be used internally to compare different hands
+        * The property _compareValues is to be used internally to compare different hands.
+        * IMPORTANT: The function assumes thath this.cards is sorted among card values in descending order.
         */
-        compute_value:function(){
+        function compute_value () {
+            var that = this;
             var flat_values = _.pluck(this.cards,'_value');
             var occurences = {};
+            var new_cards = null;
             var hand_occurence_pattern = null;
 
             // Is color
@@ -129,45 +169,29 @@ define(['underscore','./core','./card', './set'],function(_, _ucengine_ , _deckm
                 else {
                     this._handNature = hand_types.highcard;
                 }
+
+                // Re-sorting the cards
+                if(hand_types.highcard != this._handNature) {
+                    new_cards = [];
+                    _.each(that._compareValues, function(value_to_top){
+                        _.each(that.cards, function(card){
+                            if(value_to_top === card._value) {
+                                new_cards.push(card);
+                            }
+                        });
+                    });
+
+                    this.cards = new_cards;
+                }
             }
 
             //  For any hand
             this._compareValues.unshift(this._handNature.value);
-        },
 
-        compare: function(hand){
-            var result = 0;
-            var index = 0;
 
-            if(_.isUndefined(this._compareValues)) {
-                this.compute_value();
-            }
-            if(_.isUndefined(hand._compareValues)) {
-                hand.compute_value();
-            }
-
-            while(0 === result && index < this._compareValues.length) {
-                result = _ucengine_.compareInt(this._compareValues[index], hand._compareValues[index]);
-                ++index;
-            }
-
-            return result;
-        },
-
-        toString:function() {
-            return this.cards.join('');
         }
-    });
 
-    function create_hand(iArg)
-    {
-        var cards = null;
-        var exception = null;
-        var index = 0;
-        var current_card = 0;
-        var hand_object = null;
-        var cardId = null;
-        var elements_are_cards = false;
+
 
         if(_.isString(iArg))
         {
@@ -205,8 +229,7 @@ define(['underscore','./core','./card', './set'],function(_, _ucengine_ , _deckm
         cards.sort(function(card1, card2){
             return -(card1.compare(card2));
         });
-
-        cards = _.uniq(cards, true);
+        cards = _.uniq(cards, false);
         
         if(5 !== cards.length) {
             throw {
@@ -215,7 +238,8 @@ define(['underscore','./core','./card', './set'],function(_, _ucengine_ , _deckm
             };
         }
 
-        hand_object = _ucengine_.createProtectedObject(hand_prototype, {cards: cards});
+        hand_object = _ucengine_.createObject(hand_prototype, {cards: cards});
+        compute_value.apply(hand_object);
 
         return hand_object;
     };
