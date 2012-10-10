@@ -151,6 +151,26 @@ define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( 
             handset = _handmod_.createHandSet({pick_min:0, pick_max:2, hole_cards:'QhQs', common_cards:'Th9h5cAh6h'});
             hand = handset.computeHighest();
             expect(hand.toString()).toBe('AhQhTh9h6h');
+
+			handset = _handmod_.createHandSet({pick_min:0, pick_max:2, hole_cards:'9cJs', common_cards:'As8hThAd7h'});
+            hand = handset.computeHighest();
+            expect(hand.toString()).toBe('JsTh9c8h7h');
+
+            handset = _handmod_.createHandSet({pick_min:0, pick_max:2, hole_cards:'Ah2c', common_cards:'As8hThAd7h'});
+            hand = handset.computeHighest();
+            expect(hand.toString()).toBe('AhAsAdTh8h');
+
+            handset = _handmod_.createHandSet({pick_min:0, pick_max:2, hole_cards:'3hQh', common_cards:'As8hThAd7h'});
+            hand = handset.computeHighest();
+            expect(hand.toString()).toBe('QhTh8h7h3h');
+
+            handset = _handmod_.createHandSet({pick_min:0, pick_max:2, hole_cards:'7cTc', common_cards:'As8hThAd7h'});
+            hand = handset.computeHighest();
+            expect(hand.toString()).toBe('AsAdTcTh8h');
+
+            handset = _handmod_.createHandSet({pick_min:0, pick_max:2, hole_cards:'5d6d', common_cards:'As8hThAd7h'});
+            hand = handset.computeHighest();
+            expect(hand.toString()).toBe('AsAdTh8h7h');
             //console.log(hand);
         });
 
@@ -158,6 +178,23 @@ define(['underscore', 'undercover/core/card', 'undercover/core/hand'],function( 
             var handset = _handmod_.createHandSet({pick_min:2, pick_max:2, hole_cards:'QhQs4d8d', common_cards:'Th9h5cAh6h'});
             var hand = handset.computeHighest();
             expect(hand.toString()).toBe('QhQsAhTh9h');
+
+            handset = _handmod_.createHandSet({pick_min:2, pick_max:2, hole_cards:'7hQs4d8d', common_cards:'Th9h5cAh6h'});
+            hand = handset.computeHighest();
+            expect(hand.toString()).toBe('Th9h8d7h6h');
+
+            handset = _handmod_.createHandSet({pick_min:2, pick_max:2, hole_cards:'7hQh4d8d', common_cards:'Th9h5cAh6h'});
+            hand = handset.computeHighest();
+            expect(hand.toString()).toBe('AhQhTh9h7h');
+
+            handset = _handmod_.createHandSet({pick_min:2, pick_max:2, hole_cards:'7hQh4d8d', common_cards:'KhKsKdKc9h'});
+            hand = handset.computeHighest();
+            expect(hand.toString()).toBe('KhKsKdQh8d');
+
+            handset = _handmod_.createHandSet({pick_min:2, pick_max:2, hole_cards:'7hQh4d4c', common_cards:'KhKsKdKc9h'});
+            hand = handset.computeHighest();
+            expect(hand.toString()).toBe('KhKsKd4d4c');
+
 
             //console.log(hand);
         });
