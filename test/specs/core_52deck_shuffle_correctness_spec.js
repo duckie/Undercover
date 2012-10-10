@@ -10,7 +10,7 @@ define(['undercover/core/card','undercover/core/random'],function(_deckmod_,Rand
 		var epsilon = 1e-3;
 
 		deck = _deckmod_.newShuffledDeck();
-		//console.log(underscore.newShuffledDeck());
+		//console.log(_deckmod_.newShuffledDeck());
 
 		it('should give the same mean each.', function() {
 			for(i = 0; i < iter; i++) {

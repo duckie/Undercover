@@ -148,30 +148,17 @@ define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
     function create_deck() {
         var permutation = [];
         var index = 0;
-        var result_deck = [];
+        var index_to_swap = 0;
+        var result_deck = _.clone(basic_deck);
         var deck_object = null;
-        var generator = _random_();
+        var temp_card = null;
+        var generator = _random_().uint32;
 
-        for(index = 0; index < 52; index++) {
-            permutation[index] = [index,generator()];
-        }
-
-        permutation.sort(function(elem1, elem2){
-            if( (elem1[1] - elem2[1]) === 0) {
-                return 0;
-            }
-            else {
-                if( (elem1[1] - elem2[1]) < 0) {
-                    return -1;
-                }
-                else {
-                    return 1;
-                }
-            }
-        });
-
-        for(index = 0; index < 52; index++) {
-            result_deck[result_deck.length] = basic_deck[permutation[index][0]];
+        for(index = 51; index > 0; --index) {
+            index_to_swap = generator()%(index + 1);
+            temp_card = result_deck[index_to_swap];
+            result_deck[index_to_swap] = result_deck[index];
+            result_deck[index] = temp_card;
         }
 
         deck_object = _ucengine_.createObject(deck_prototype);
