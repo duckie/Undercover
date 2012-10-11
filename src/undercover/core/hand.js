@@ -79,6 +79,105 @@ define(['underscore','./core','./card', './set'],function(_, _ucengine_ , _deckm
         }
     });
 
+    /**
+    * Computes the nature of the hand and all the needed charasteristics to compare the hand with another one
+    *
+    * The property _handNature will be generated containing what the hand is
+    * The property _compareValues is to be used internally to compare different hands.
+    * IMPORTANT: The function assumes thath this.cards is sorted among card values in descending order.
+    */
+    function compute_value () {
+        var that = this;
+        var flat_values = _.pluck(this.cards,'_value');
+        var occurences = {};
+        var new_cards = null;
+        var hand_occurence_pattern = null;
+
+        // Is flush
+        var first_card_color = this.cards[0]._color;
+        var is_flush = _.all(this.cards, function(card) { return first_card_color === card._color; });
+
+        // Is a straight
+        var top_value = this.cards[0]._value + 1;
+        var is_straight = _.reduce(this.cards, function(ok, card){
+            ok = ok && (1 === (top_value - card._value));
+            top_value = card._value;
+            return ok;
+        }, true);
+
+        if(is_flush || is_straight) {
+            this._compareValues = flat_values;
+            if(is_flush && is_straight) {
+                this._handNature = hand_types.straightflush;
+            }
+            else if(is_flush) {
+                this._handNature = hand_types.flush;   
+            }
+            else {
+                this._handNature = hand_types.straight;
+            }
+        }
+        else {
+            // Counting occurences of each value
+            _.each(this.cards, function(card) {
+                var value = card._value;
+                //occurences[value] = occurences[value] ? 1 : occurences[value] + 1;
+                if(_.has(occurences,value)) {
+                    ++(occurences[value].count);
+                }
+                else {
+                    occurences[value] = {val:value, count:1};
+                }
+            });
+
+            // Get rid of the keys and sorts
+            occurences = _.values(occurences);
+            occurences.sort(function(elem1,elem2){ 
+                var on_count = -_ucengine_.compareInt(elem1.count, elem2.count);
+                return (0 === on_count) ? -_ucengine_.compareInt(elem1.val, elem2.val) : on_count;
+            });
+
+            this._compareValues = _.pluck(occurences,'val');
+
+            hand_occurence_pattern = _.pluck(occurences,'count');
+            if(_.isEqual([4,1], hand_occurence_pattern)) {
+                this._handNature = hand_types.square;
+            }
+            else if(_.isEqual([3,2], hand_occurence_pattern)) {
+                this._handNature = hand_types.full;
+            }
+            else if(_.isEqual([3,1,1], hand_occurence_pattern)) {
+                this._handNature = hand_types.trips;
+            }
+            else if(_.isEqual([2,2,1], hand_occurence_pattern)) {
+                this._handNature = hand_types.twopairs;
+            }
+            else if(_.isEqual([2,1,1,1], hand_occurence_pattern)) {
+                this._handNature = hand_types.pair;
+            }
+            else {
+                this._handNature = hand_types.highcard;
+            }
+
+            // Re-sorting the cards
+            if(hand_types.highcard != this._handNature) {
+                new_cards = [];
+                _.each(that._compareValues, function(value_to_top){
+                    _.each(that.cards, function(card){
+                        if(value_to_top === card._value) {
+                            new_cards.push(card);
+                        }
+                    });
+                });
+
+                this.cards = new_cards;
+            }
+        }
+
+        //  For any hand
+        this._compareValues.unshift(this._handNature.value);
+    }
+
     function create_hand(iArg)
     {
         var cards = null;
@@ -88,110 +187,6 @@ define(['underscore','./core','./card', './set'],function(_, _ucengine_ , _deckm
         var hand_object = null;
         var cardId = null;
         var elements_are_cards = false;
-
-
-        /**
-        * Computes the nature of the hand and all the needed charasteristics to compare the hand with another one
-        *
-        * The property _handNature will be generated containing what the hand is
-        * The property _compareValues is to be used internally to compare different hands.
-        * IMPORTANT: The function assumes thath this.cards is sorted among card values in descending order.
-        */
-        function compute_value () {
-            var that = this;
-            var flat_values = _.pluck(this.cards,'_value');
-            var occurences = {};
-            var new_cards = null;
-            var hand_occurence_pattern = null;
-
-            // Is color
-            var first_card_color = this.cards[0]._color;
-            var is_flush = _.all(this.cards, function(card) { return first_card_color === card._color; });
-
-            // Is a straight
-            var top_value = this.cards[0]._value + 1;
-            var is_straight = _.reduce(this.cards, function(ok, card){
-                ok = ok && (1 === (top_value - card._value));
-                top_value = card._value;
-                return ok;
-            }, true);
-
-            if(is_flush || is_straight) {
-                this._compareValues = flat_values;
-                if(is_flush && is_straight) {
-                    this._handNature = hand_types.straightflush;
-                }
-                else if(is_flush) {
-                    this._handNature = hand_types.flush;   
-                }
-                else {
-                    this._handNature = hand_types.straight;
-                }
-            }
-            else {
-                // Counting occurences of each value
-                _.each(this.cards, function(card) {
-                    var value = card._value;
-                    //occurences[value] = occurences[value] ? 1 : occurences[value] + 1;
-                    if(_.has(occurences,value)) {
-                        ++(occurences[value].count);
-                    }
-                    else {
-                        occurences[value] = {val:value, count:1};
-                    }
-                });
-
-                // Get rid of the keys and sorts
-                occurences = _.values(occurences);
-                occurences.sort(function(elem1,elem2){ 
-                    var on_count = -_ucengine_.compareInt(elem1.count, elem2.count);
-                    return (0 === on_count) ? -_ucengine_.compareInt(elem1.val, elem2.val) : on_count;
-                });
-
-                this._compareValues = _.pluck(occurences,'val');
-
-                hand_occurence_pattern = _.pluck(occurences,'count');
-                if(_.isEqual([4,1], hand_occurence_pattern)) {
-                    this._handNature = hand_types.square;
-                }
-                else if(_.isEqual([3,2], hand_occurence_pattern)) {
-                    this._handNature = hand_types.full;
-                }
-                else if(_.isEqual([3,1,1], hand_occurence_pattern)) {
-                    this._handNature = hand_types.trips;
-                }
-                else if(_.isEqual([2,2,1], hand_occurence_pattern)) {
-                    this._handNature = hand_types.twopairs;
-                }
-                else if(_.isEqual([2,1,1,1], hand_occurence_pattern)) {
-                    this._handNature = hand_types.pair;
-                }
-                else {
-                    this._handNature = hand_types.highcard;
-                }
-
-                // Re-sorting the cards
-                if(hand_types.highcard != this._handNature) {
-                    new_cards = [];
-                    _.each(that._compareValues, function(value_to_top){
-                        _.each(that.cards, function(card){
-                            if(value_to_top === card._value) {
-                                new_cards.push(card);
-                            }
-                        });
-                    });
-
-                    this.cards = new_cards;
-                }
-            }
-
-            //  For any hand
-            this._compareValues.unshift(this._handNature.value);
-
-
-        }
-
-
 
         if(_.isString(iArg))
         {
