@@ -1,4 +1,9 @@
-// This module is designed for RequireJS()
+/**
+* Hand management module
+*
+* This modules provides the math to create hands, compare them and computes
+* which hand a player have from the cards he/she holds.
+*/
 define(['underscore','./core','./card', './set'],function(_, _ucengine_ , _deckmod_, _set_ ) {
 
     /**

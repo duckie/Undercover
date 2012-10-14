@@ -1,24 +1,37 @@
+/**
+* Game module
+*
+* Work in progress here
+*/
 define(['underscore','./core','./card', './hand'],function(_, _ucengine_ , _deck_, _hands_ ) {
-	var game_prototype = {
-		nextHand: function () {
+    var game_prototype = {
+        nextHand: function () {
+            
+        },
 
-		},
+        bet: function (player, amount) {
 
-		bet: function (player, amount) {
+        },
 
-		},
+        check: function (player) {
 
-		check: function (player) {
+        },
 
-		},
+        fold: function (player) {
 
-		fold: function (player) {
+        },
 
-		},
+        changeVariation: function(variation) {
 
-		changeVariation: function(variation) {
-			
-		}
-	};
-	return _ucengine_.createUCObject();
+        }
+    };
+
+    function create_game(config) {
+        var game = _ucengine_.createObject(game_prototype);
+        //game.
+    };
+
+
+
+    return _ucengine_.createUCObject();
 });

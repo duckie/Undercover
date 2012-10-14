@@ -1,7 +1,15 @@
 /**
+* Core module
+*
+* The core module provides basic javascript patterns and
+* utilities for the other modules. There is nothing about poker in it.
+*
+*
 * The code conventions are:
 * - A required module should be prefixed and suffixed by a _, except for UnderscoreJS.
-* - A "private" variable or function must be prefixed with a _.
+* - A internal variable (closure) has the "boost" naming (this_is_a_name)
+* - An public function of a module is camel cased.
+* - A public attribute is prefixed with a single _.
 */
 
 // This module is designed for RequireJS()

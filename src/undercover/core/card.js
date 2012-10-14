@@ -1,4 +1,10 @@
-// This module is designed for RequireJS()
+/**
+* Cards module
+*
+* This module contains the definitions of the cards of a 52 cards deck
+* and provides a function to get a shuffled deck. It also has an utility
+* to easily get a card definition from its string representation
+*/
 define(['underscore','./core','./random'],function(_, _ucengine_, _random_) {
 
     var dictionary = {};
