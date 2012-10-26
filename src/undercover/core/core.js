@@ -9,7 +9,7 @@
 * - A required module should be prefixed and suffixed by a _, except for UnderscoreJS.
 * - A internal variable (closure) has the "boost" naming (this_is_a_name)
 * - An public function of a module is camel cased.
-* - A public attribute is prefixed with a single _.
+* - I dont know yet which convention is good for public value properties 
 */
 
 // This module is designed for RequireJS()
