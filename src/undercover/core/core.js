@@ -62,15 +62,30 @@ define(['underscore'], function(_){
         return create_protected_object(uc_object_prototype, properties);
     }
 
+    function register_error(id, msg_function)
+    {
+        this.errors_dic[id] = msg_function;
+    }
+
     /**
     * Basic assertion
     */
-    function assert(iAssertion) {
-        if(!iAssertion) {
-            throw {
-                name:'Undercover internal',
-                message: 'assertion failed'
-            }    
+    function assert(assertion, error_id) {
+        var error = null;
+        var that = this;
+        if(!assertion) {
+            if(_.isUndefined(error_id)) {
+                throw {
+                    name:'Undercover internal',
+                    message: 'assertion failed'
+                }
+            }
+            else {
+                throw {
+                    name:'Undercover internal',
+                    message: _.has(that.errors_dic,error_id) ? that.errors_dic[error_id]() : error_id
+                }       
+            }
         }
     }
 
@@ -83,6 +98,7 @@ define(['underscore'], function(_){
     }
 
     return create_uc_object({
+        errors_dic:{},
         assert: assert,
         compareInt: integer_comparison,
         createUCObject: create_uc_object,
