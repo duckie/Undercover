@@ -59,6 +59,7 @@ define(['underscore','./core'],function(_, _uc_) {
             var candidate = null;
 
             // Input contract
+            // Not finished
             _uc_.assert(!this.finished,'bet_round_finished');
             // Checking that the bet is legit : must be a call (check if == 0 and player current bets == current max bets) or a sufficient raise, or all-in
             _uc_.assert(this.max_bet === (player.bets + amount) || (this.max_bet + this.min_raise(this.last_raise)) <= player.bets + amount || player.core_player.stack === amount, 'bet_bet_amount_forbiden');
@@ -137,9 +138,16 @@ define(['underscore','./core'],function(_, _uc_) {
         var index = 0;
         var current = null;
         var min_raise = _.isUndefined(params.min_raise) ? function (amount) { return 2*amount; } : params.min_raise;
+        
+        // Particular case of the heads-up
+        if(2 == nb_players) {
+            big_blind_pos = small_blind_pos;
+            current_player = params.button_index;
+            small_blind_pos = params.button_index;
+        }
 
         _uc_.assert(0 < params.button_index && params.button_index < nb_players, 'bet_create_round_param_not_consistent');
-        
+
         for(index = 0; index < nb_players; ++index) {
             current = {
                 core_player: players[index],
@@ -156,8 +164,8 @@ define(['underscore','./core'],function(_, _uc_) {
             button: params.button_index,
             sb: small_blind_pos,
             bb: big_blind_pos,
-            current_player: small_blind_pos,
-            min_raise: min_raise,
+            current_player: current_player,
+            min_raise: function(raise){ return 0;},
             last_raiser_pos:-1,
             pot:0,
             max_bet:0,
@@ -166,10 +174,11 @@ define(['underscore','./core'],function(_, _uc_) {
         });
 
         //Blinds
-        console.log(round);
         round.bet(params.small_blind);
-        round.bet(_.has(params,'big_blnd') ? params.big_blind : 2*params.small_blind);
-        round.last_raiser_pos = (round.big_blind_pos+1)%nb_players;
+        round.min_raise = function(raise){ return params.small_blind;};
+        round.bet(_.has(params,'big_blind') ? params.big_blind : 2*params.small_blind);
+        round.min_raise = min_raise;
+        round.last_raiser_pos = (round.bb+1)%nb_players;
 
         return round;
     };
