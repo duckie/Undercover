@@ -61,15 +61,18 @@ define(['underscore','./core'],function(_, _uc_) {
             // Input contract
             // Not finished
             _uc_.assert(!this.finished,'bet_round_finished');
+            // Player has enough money
+            _uc_.assert(amount <= player.core_player.stack);
             // Checking that the bet is legit : must be a call (check if == 0 and player current bets == current max bets) or a sufficient raise, or all-in
-            _uc_.assert(this.max_bet === (player.bets + amount) || (this.max_bet + this.min_raise(this.last_raise)) <= player.bets + amount || player.core_player.stack === amount, 'bet_bet_amount_forbiden');
+            _uc_.assert( (player.bets + player.core_player.stack) <= this.max_bet || this.max_bet === (player.bets + amount) || (this.max_bet + this.min_raise(this.last_raise)) <= player.bets + amount || player.core_player.stack === amount, 'bet_bet_amount_forbiden');
 
             // Bets
             raise_value = player.bets + amount - this.max_bet;
             if(raise_value < 0) {
                 raise_value = 0;
             }
-            
+        
+            // Modifying the model
             player.bets += amount;
             player.core_player.stack -= amount;
             this.pot += amount;
@@ -92,6 +95,7 @@ define(['underscore','./core'],function(_, _uc_) {
                 if(true === candidate.allin || true === candidate.folded) {
                     continue;
                 }
+                // WTF man ??? if(0 === raise_value && (2 === nb_players ? true : (next_player_pos === this.last_raiser_pos || false === this.players[this.last_raiser_pos].folded) ) ) {
                 if(0 === raise_value && next_player_pos === this.last_raiser_pos) {
                     this.finished = true;
                     break;
@@ -107,6 +111,10 @@ define(['underscore','./core'],function(_, _uc_) {
 
             // Return info about what happened
             return {};
+        },
+
+        check: function() {
+            this.bet(0);
         }
     };
 
